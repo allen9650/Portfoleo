@@ -153,6 +153,38 @@ export default function ToolsPage() {
       return;
     }
 
+    // PRIMARY ENGINE: Native TCP Socket API (/api/check-port)
+    // Instant TCP 3-way handshake in Vite local dev and Vercel serverless production
+    try {
+      const nativeController = new AbortController();
+      const nativeTimeout = setTimeout(() => nativeController.abort(), 4500);
+      const nativeRes = await fetch(`/api/check-port?host=${encodeURIComponent(cleanHost)}&port=${targetPort}`, {
+        signal: nativeController.signal
+      });
+      clearTimeout(nativeTimeout);
+
+      if (nativeRes.ok) {
+        const data = await nativeRes.json();
+        if (data && data.status) {
+          setProbeStatus(data.status);
+          setProbeLatency(data.latency !== undefined ? data.latency : null);
+          setProbeDetails({
+            cleanHost,
+            targetPort,
+            latency: data.latency,
+            message: data.message || `Port ${targetPort} is ${data.status.toUpperCase()} on ${cleanHost}`,
+            engine: 'Native TCP Socket Engine',
+            powershell: `Test-NetConnection -ComputerName ${cleanHost} -Port ${targetPort}`,
+            bash: `nc -zv ${cleanHost} ${targetPort}`,
+            externalCheckUrl: `https://portchecker.co/check?target_ip=${encodeURIComponent(cleanHost)}&port=${targetPort}`
+          });
+          return;
+        }
+      }
+    } catch (nativeErr) {
+      // Fall through to fallback engine if static export without backend
+    }
+
     // SCENARIO 1: Private Subnet / Localhost
     if (isPrivateHost(cleanHost)) {
       if (RESTRICTED_BROWSER_PORTS.includes(targetPort)) {
@@ -211,7 +243,7 @@ export default function ToolsPage() {
       return;
     }
 
-    // SCENARIO 2: WAN / Public IP / Domain Check via Check-Host Global Multi-Node Engine
+    // SCENARIO 2: Fallback WAN / Public IP / Domain Check via Check-Host Global Multi-Node Engine
     try {
       const initRes = await fetch(`https://check-host.net/check-tcp?host=${encodeURIComponent(cleanHost)}:${targetPort}&max_nodes=4`, {
         headers: { 'Accept': 'application/json' }
@@ -356,7 +388,10 @@ export default function ToolsPage() {
       console.error('WAN Port check error:', wanErr);
       setProbeStatus('error');
       setProbeDetails({
-        message: `Unable to query global TCP probe nodes (${wanErr.message}). You can also run terminal diagnostics:`,
+        cleanHost,
+        targetPort,
+        message: `Global public sensor connection failed (${wanErr.message}). You can test instantly via PortChecker.co or run terminal diagnostics:`,
+        externalCheckUrl: `https://portchecker.co/check?target_ip=${encodeURIComponent(cleanHost)}&port=${targetPort}`,
         powershell: `Test-NetConnection -ComputerName ${cleanHost} -Port ${targetPort}`,
         bash: `nc -zv ${cleanHost} ${targetPort}`
       });
@@ -985,6 +1020,24 @@ export default function ToolsPage() {
                       className="inline-flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 hover:underline font-semibold"
                     >
                       <span>View Full Sensor Log</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
+
+                {/* External Verification link */}
+                {probeDetails?.externalCheckUrl && (
+                  <div className="pt-2 flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-500 dark:text-slate-400">
+                      Direct Web Check:
+                    </span>
+                    <a
+                      href={probeDetails.externalCheckUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-700 text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 font-semibold transition-all"
+                    >
+                      <span>Test on PortChecker.co</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
