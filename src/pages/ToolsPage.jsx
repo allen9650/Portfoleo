@@ -28,7 +28,10 @@ import {
   XCircle,
   HelpCircle,
   Download,
-  Share2
+  Share2,
+  Globe,
+  ExternalLink,
+  Terminal
 } from 'lucide-react';
 import { computeHash } from '../utils/hashUtils';
 
@@ -60,11 +63,53 @@ export default function ToolsPage() {
   // ==========================================
   // 1. PORT CHECKER & DIRECTORY STATE
   // ==========================================
-  const [portHost, setPortHost] = useState('localhost');
+  const [portHost, setPortHost] = useState('scanme.nmap.org');
   const [portNumber, setPortNumber] = useState('80');
-  const [probeStatus, setProbeStatus] = useState(null); // 'checking' | 'open' | 'closed' | 'restricted'
+  const [probeStatus, setProbeStatus] = useState(null); // 'checking' | 'open' | 'closed' | 'timeout' | 'unknown-host' | 'browser-restricted' | 'error'
   const [probeLatency, setProbeLatency] = useState(null);
+  const [probeDetails, setProbeDetails] = useState(null);
+  const [isDetectingIp, setIsDetectingIp] = useState(false);
+  const [copiedCmd, setCopiedCmd] = useState(null);
   const [directorySearch, setDirectorySearch] = useState('');
+
+  const RESTRICTED_BROWSER_PORTS = [
+    1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 77, 79, 87, 95,
+    101, 102, 103, 104, 109, 110, 111, 113, 115, 117, 119, 123, 135, 139, 143, 179,
+    389, 465, 512, 513, 514, 515, 526, 530, 531, 532, 540, 556, 563, 587, 601, 636,
+    993, 995, 2049, 3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669, 6697
+  ];
+
+  const isPrivateHost = (rawHost) => {
+    const h = (rawHost || '').trim().toLowerCase().replace(/^https?:\/\//i, '').split('/')[0].split(':')[0];
+    if (!h || h === 'localhost' || h === '127.0.0.1' || h.startsWith('127.')) return true;
+    if (/^192\.168\./.test(h)) return true;
+    if (/^10\./.test(h)) return true;
+    if (/^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(h)) return true;
+    return false;
+  };
+
+  const handleDetectPublicIp = async () => {
+    setIsDetectingIp(true);
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ip) {
+          setPortHost(data.ip);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to detect public IP:', e);
+    } finally {
+      setIsDetectingIp(false);
+    }
+  };
+
+  const copyCommandToClipboard = (text, key) => {
+    navigator.clipboard.writeText(text);
+    setCopiedCmd(key);
+    setTimeout(() => setCopiedCmd(null), 2000);
+  };
 
   const commonPorts = [
     { port: 21, name: 'FTP', proto: 'TCP', risk: 'High', desc: 'File Transfer Protocol (Cleartext credentials risk)', fire: 'Block on WAN; use SFTP (Port 22)' },
@@ -91,43 +136,230 @@ export default function ToolsPage() {
   const handleTestPort = async () => {
     setProbeStatus('checking');
     setProbeLatency(null);
-    const start = performance.now();
+    setProbeDetails(null);
 
-    const cleanHost = portHost.trim().replace(/^https?:\/\//i, '').split('/')[0];
+    const cleanHost = portHost.trim().replace(/^https?:\/\//i, '').split('/')[0].split(':')[0];
     const targetPort = parseInt(portNumber, 10);
 
-    // If testing common web ports on local/remote
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3500);
+    if (!cleanHost) {
+      setProbeStatus('error');
+      setProbeDetails({ message: 'Please enter a valid hostname or IP address.' });
+      return;
+    }
 
-      const protocol = targetPort === 443 ? 'https' : 'http';
-      const testUrl = `${protocol}://${cleanHost}:${targetPort}`;
+    if (isNaN(targetPort) || targetPort < 1 || targetPort > 65535) {
+      setProbeStatus('error');
+      setProbeDetails({ message: 'Please enter a port number between 1 and 65535.' });
+      return;
+    }
 
-      await fetch(testUrl, {
-        method: 'HEAD',
-        mode: 'no-cors',
-        signal: controller.signal
-      });
+    // SCENARIO 1: Private Subnet / Localhost
+    if (isPrivateHost(cleanHost)) {
+      if (RESTRICTED_BROWSER_PORTS.includes(targetPort)) {
+        setProbeStatus('browser-restricted');
+        setProbeDetails({
+          cleanHost,
+          targetPort,
+          message: `Port ${targetPort} is blocked by browser security (ERR_UNSAFE_PORT) to protect your local machine. Use native terminal diagnostics below:`,
+          powershell: `Test-NetConnection -ComputerName ${cleanHost} -Port ${targetPort}`,
+          bash: `nc -zv ${cleanHost} ${targetPort}`
+        });
+        return;
+      }
 
-      clearTimeout(timeoutId);
-      const latency = Math.round(performance.now() - start);
-      setProbeLatency(latency);
-      setProbeStatus('open');
-    } catch (err) {
-      const latency = Math.round(performance.now() - start);
-      setProbeLatency(latency);
-      if (err.name === 'AbortError') {
-        setProbeStatus('timeout');
-      } else {
-        // In browser sandbox, non-HTTP ports will trigger fetch reject (CORS or network error).
-        // If connection is made in < 50ms it usually means TCP port rejected (Closed) or CORS blocked (which means port is actually OPEN!)
-        if (latency < 400) {
-          setProbeStatus('cors-detected'); // Port responded, but browser blocked payload
+      // Standard dev / web ports on localhost
+      const start = performance.now();
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        const protocol = targetPort === 443 || targetPort === 8443 ? 'https' : 'http';
+        await fetch(`${protocol}://${cleanHost}:${targetPort}`, {
+          method: 'GET',
+          mode: 'no-cors',
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        const elapsed = Math.round(performance.now() - start);
+        setProbeLatency(elapsed);
+        setProbeStatus('open');
+        setProbeDetails({
+          cleanHost,
+          targetPort,
+          message: `Port ${targetPort} is OPEN on ${cleanHost}. Local service responded in ${elapsed}ms.`
+        });
+      } catch (err) {
+        const elapsed = Math.round(performance.now() - start);
+        setProbeLatency(elapsed);
+        if (err.name === 'AbortError') {
+          setProbeStatus('timeout');
+          setProbeDetails({
+            cleanHost,
+            targetPort,
+            message: `Connection timed out after 2s. No local listener responded on ${cleanHost}:${targetPort}.`
+          });
         } else {
           setProbeStatus('closed');
+          setProbeDetails({
+            cleanHost,
+            targetPort,
+            message: `Connection refused or host unreachable. No service (Docker, Node, Apache, Nginx) is listening on port ${targetPort}.`,
+            powershell: `Test-NetConnection -ComputerName ${cleanHost} -Port ${targetPort}`,
+            bash: `nc -zv ${cleanHost} ${targetPort}`
+          });
         }
       }
+      return;
+    }
+
+    // SCENARIO 2: WAN / Public IP / Domain Check via Check-Host Global Multi-Node Engine
+    try {
+      const initRes = await fetch(`https://check-host.net/check-tcp?host=${encodeURIComponent(cleanHost)}:${targetPort}&max_nodes=4`, {
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (!initRes.ok) {
+        throw new Error(`Public probe API returned HTTP ${initRes.status}`);
+      }
+
+      const initData = await initRes.json();
+      if (!initData || !initData.request_id) {
+        throw new Error('Could not initiate global TCP check');
+      }
+
+      const { request_id, nodes, permanent_link } = initData;
+
+      // Poll for node completion
+      let finalResults = null;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        await new Promise(r => setTimeout(r, 900));
+        const pollRes = await fetch(`https://check-host.net/check-result/${request_id}`, {
+          headers: { 'Accept': 'application/json' }
+        });
+        if (pollRes.ok) {
+          const pollData = await pollRes.json();
+          if (pollData && Object.values(pollData).some(v => v !== null)) {
+            finalResults = pollData;
+            break;
+          }
+        }
+      }
+
+      if (!finalResults) {
+        setProbeStatus('timeout');
+        setProbeDetails({
+          permanentLink: permanent_link,
+          message: `Global nodes are still completing the TCP 3-way handshake. View live report below.`
+        });
+        return;
+      }
+
+      const nodeDetails = [];
+      let hasOpen = false;
+      let hasRefused = false;
+      let hasTimeout = false;
+      let hasUnknownHost = false;
+      let resolvedIp = null;
+      let minLatency = 999999;
+
+      Object.entries(finalResults).forEach(([nodeKey, nodeData]) => {
+        const nodeMeta = nodes[nodeKey] || [];
+        const countryCode = nodeMeta[0] || 'globe';
+        const countryName = nodeMeta[1] || 'Global Node';
+        const cityName = nodeMeta[2] || '';
+
+        if (Array.isArray(nodeData) && nodeData.length > 0) {
+          const item = nodeData[0];
+          if (item.address) resolvedIp = item.address;
+
+          if (item.time !== undefined && item.time !== null) {
+            hasOpen = true;
+            const latMs = Math.round(item.time * 1000);
+            if (latMs < minLatency) minLatency = latMs;
+            nodeDetails.push({
+              nodeKey,
+              countryCode,
+              countryName,
+              cityName,
+              status: 'open',
+              latency: latMs,
+              error: null
+            });
+          } else if (item.error) {
+            const errLower = item.error.toLowerCase();
+            let statusType = 'timeout';
+            if (errLower.includes('refused')) {
+              hasRefused = true;
+              statusType = 'refused';
+            } else if (errLower.includes('unknown') || errLower.includes('host')) {
+              hasUnknownHost = true;
+              statusType = 'unknown-host';
+            } else {
+              hasTimeout = true;
+              statusType = 'timeout';
+            }
+
+            nodeDetails.push({
+              nodeKey,
+              countryCode,
+              countryName,
+              cityName,
+              status: statusType,
+              latency: null,
+              error: item.error
+            });
+          }
+        }
+      });
+
+      if (hasOpen) {
+        setProbeStatus('open');
+        setProbeLatency(minLatency === 999999 ? 50 : minLatency);
+        setProbeDetails({
+          cleanHost,
+          targetPort,
+          resolvedIp,
+          permanentLink: permanent_link,
+          nodeResults: nodeDetails,
+          message: `Port ${targetPort} is OPEN & ACCESSIBLE from the public internet.`
+        });
+      } else if (hasUnknownHost) {
+        setProbeStatus('unknown-host');
+        setProbeDetails({
+          cleanHost,
+          targetPort,
+          permanentLink: permanent_link,
+          nodeResults: nodeDetails,
+          message: `DNS could not resolve "${cleanHost}". Please verify the domain name or IPv4 address.`
+        });
+      } else if (hasRefused) {
+        setProbeStatus('closed');
+        setProbeDetails({
+          cleanHost,
+          targetPort,
+          resolvedIp,
+          permanentLink: permanent_link,
+          nodeResults: nodeDetails,
+          message: `Port ${targetPort} is CLOSED (Connection Refused). The server at ${resolvedIp || cleanHost} is online, but no service is listening on port ${targetPort}.`
+        });
+      } else {
+        setProbeStatus('timeout');
+        setProbeDetails({
+          cleanHost,
+          targetPort,
+          resolvedIp,
+          permanentLink: permanent_link,
+          nodeResults: nodeDetails,
+          message: `Port ${targetPort} TIMED OUT / FILTERED. No TCP ACK was returned. This usually means a firewall, NAT router, or ISP dropped the connection.`
+        });
+      }
+    } catch (wanErr) {
+      console.error('WAN Port check error:', wanErr);
+      setProbeStatus('error');
+      setProbeDetails({
+        message: `Unable to query global TCP probe nodes (${wanErr.message}). You can also run terminal diagnostics:`,
+        powershell: `Test-NetConnection -ComputerName ${cleanHost} -Port ${targetPort}`,
+        bash: `nc -zv ${cleanHost} ${targetPort}`
+      });
     }
   };
 
@@ -511,131 +743,293 @@ export default function ToolsPage() {
                 </h2>
               </div>
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                <span>Client-Side Probe</span>
+                <Globe className="w-4 h-4 text-cyan-500" />
+                <span>Global Multi-Node TCP Engine</span>
               </div>
             </div>
 
             {/* Input Controls */}
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
-              <div className="sm:col-span-6 space-y-1.5">
-                <label className="text-xs font-mono text-slate-600 dark:text-slate-400 block font-semibold">
-                  Target Hostname or IP Address:
-                </label>
-                <input
-                  type="text"
-                  value={portHost}
-                  onChange={(e) => setPortHost(e.target.value)}
-                  placeholder="e.g. localhost, 192.168.1.1, google.com"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-sm font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500"
-                />
-              </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
+                <div className="sm:col-span-6 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-mono text-slate-600 dark:text-slate-400 block font-semibold">
+                      Target Hostname or IP:
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleDetectPublicIp}
+                        disabled={isDetectingIp}
+                        className="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                        title="Auto-detect your public WAN IP address"
+                      >
+                        {isDetectingIp ? (
+                          <RefreshCw className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Radio className="w-3 h-3" />
+                        )}
+                        <span>Detect My Public IP</span>
+                      </button>
+                      <span className="text-slate-300 dark:text-neutral-700">|</span>
+                      <button
+                        type="button"
+                        onClick={() => setPortHost('scanme.nmap.org')}
+                        className="text-[11px] font-mono text-slate-500 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer"
+                        title="Use official Nmap test target"
+                      >
+                        nmap.org
+                      </button>
+                      <span className="text-slate-300 dark:text-neutral-700">|</span>
+                      <button
+                        type="button"
+                        onClick={() => setPortHost('localhost')}
+                        className="text-[11px] font-mono text-slate-500 hover:text-cyan-500 dark:hover:text-cyan-400 cursor-pointer"
+                        title="Test local loopback"
+                      >
+                        localhost
+                      </button>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    value={portHost}
+                    onChange={(e) => setPortHost(e.target.value)}
+                    placeholder="e.g. scanme.nmap.org, 192.168.1.1, google.com"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-sm font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500"
+                  />
+                </div>
 
-              <div className="sm:col-span-3 space-y-1.5">
-                <label className="text-xs font-mono text-slate-600 dark:text-slate-400 block font-semibold">
-                  Port Number:
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="65535"
-                  value={portNumber}
-                  onChange={(e) => setPortNumber(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-sm font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500"
-                />
-              </div>
+                <div className="sm:col-span-3 space-y-2">
+                  <label className="text-xs font-mono text-slate-600 dark:text-slate-400 block font-semibold">
+                    Port Number:
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="65535"
+                    value={portNumber}
+                    onChange={(e) => setPortNumber(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-sm font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500"
+                  />
+                </div>
 
-              <div className="sm:col-span-3">
-                <button
-                  onClick={handleTestPort}
-                  disabled={probeStatus === 'checking'}
-                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs font-mono hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  {probeStatus === 'checking' ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span>Probing...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Radio className="w-4 h-4" />
-                      <span>Test Port</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Port Chips */}
-            <div className="space-y-2 pt-2">
-              <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">
-                Quick Presets:
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { p: 21, label: 'FTP (21)' },
-                  { p: 22, label: 'SSH (22)' },
-                  { p: 25, label: 'SMTP (25)' },
-                  { p: 53, label: 'DNS (53)' },
-                  { p: 80, label: 'HTTP (80)' },
-                  { p: 443, label: 'HTTPS (443)' },
-                  { p: 554, label: 'RTSP CCTV (554)' },
-                  { p: 3306, label: 'MySQL (3306)' },
-                  { p: 3389, label: 'RDP (3389)' },
-                  { p: 8080, label: 'Web-Alt (8080)' }
-                ].map(chip => (
+                <div className="sm:col-span-3">
                   <button
-                    key={chip.p}
-                    onClick={() => { setPortNumber(chip.p.toString()); }}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-mono border transition-all cursor-pointer ${
-                      portNumber === chip.p.toString()
-                        ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400'
-                        : 'bg-slate-100 dark:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 hover:border-cyan-500/40'
-                    }`}
+                    onClick={handleTestPort}
+                    disabled={probeStatus === 'checking'}
+                    className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs font-mono hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
-                    {chip.label}
+                    {probeStatus === 'checking' ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Probing Handshake...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Radio className="w-4 h-4" />
+                        <span>Check Port</span>
+                      </>
+                    )}
                   </button>
-                ))}
+                </div>
+              </div>
+
+              {/* Quick Port Chips */}
+              <div className="space-y-1.5 pt-1">
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">
+                  Quick Presets:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { p: 80, label: 'HTTP (80)' },
+                    { p: 443, label: 'HTTPS (443)' },
+                    { p: 22, label: 'SSH (22)' },
+                    { p: 21, label: 'FTP (21)' },
+                    { p: 25, label: 'SMTP (25)' },
+                    { p: 53, label: 'DNS (53)' },
+                    { p: 554, label: 'RTSP CCTV (554)' },
+                    { p: 3306, label: 'MySQL (3306)' },
+                    { p: 3389, label: 'RDP (3389)' },
+                    { p: 8080, label: 'Web-Alt (8080)' },
+                    { p: 25565, label: 'Minecraft (25565)' }
+                  ].map(chip => (
+                    <button
+                      key={chip.p}
+                      onClick={() => { setPortNumber(chip.p.toString()); }}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono border transition-all cursor-pointer ${
+                        portNumber === chip.p.toString()
+                          ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400 shadow-sm'
+                          : 'bg-slate-100 dark:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 hover:border-cyan-500/40'
+                      }`}
+                    >
+                      {chip.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
             {/* Probe Output Status Banner */}
             {probeStatus && (
-              <div className={`p-5 rounded-2xl border transition-all ${
-                probeStatus === 'open' || probeStatus === 'cors-detected'
+              <div className={`p-6 rounded-2xl border transition-all space-y-4 ${
+                probeStatus === 'open'
                   ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-800 dark:text-emerald-300'
                   : probeStatus === 'timeout'
                   ? 'bg-amber-500/10 border-amber-500/40 text-amber-800 dark:text-amber-300'
+                  : probeStatus === 'browser-restricted'
+                  ? 'bg-indigo-500/10 border-indigo-500/40 text-indigo-800 dark:text-indigo-300'
                   : probeStatus === 'checking'
                   ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-800 dark:text-cyan-300'
                   : 'bg-rose-500/10 border-rose-500/40 text-rose-800 dark:text-rose-300'
               }`}>
-                <div className="flex items-start gap-3">
-                  {probeStatus === 'open' || probeStatus === 'cors-detected' ? (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-                  ) : probeStatus === 'timeout' ? (
-                    <Clock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                  ) : probeStatus === 'checking' ? (
-                    <RefreshCw className="w-5 h-5 text-cyan-500 shrink-0 mt-0.5 animate-spin" />
-                  ) : (
-                    <XCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                  )}
-                  <div className="space-y-1 text-xs font-mono">
-                    <span className="font-bold block text-sm">
-                      {probeStatus === 'open' && `Port ${portNumber} is OPEN & Responding`}
-                      {probeStatus === 'cors-detected' && `Port ${portNumber} is OPEN (TCP Active / Responding)`}
-                      {probeStatus === 'timeout' && `Port ${portNumber} TIMEOUT (Filtered / Firewalled)`}
-                      {probeStatus === 'closed' && `Port ${portNumber} CLOSED or Rejected by Host`}
-                      {probeStatus === 'checking' && `Probing host ${portHost}:${portNumber}...`}
-                    </span>
-                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                      {probeStatus === 'open' && `Target host accepted the connection with latency of ${probeLatency}ms.`}
-                      {probeStatus === 'cors-detected' && `Target server actively acknowledged TCP handshake on port ${portNumber} within ${probeLatency}ms.`}
-                      {probeStatus === 'timeout' && `No TCP ACK received within 3.5s. This typically indicates a stateful firewall (iptables/pfsense/Cisco ACL) dropping SYN packets.`}
-                      {probeStatus === 'closed' && `Connection was refused in ${probeLatency}ms. No service is currently bound and listening on port ${portNumber}.`}
-                    </p>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    {probeStatus === 'open' ? (
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                    ) : probeStatus === 'timeout' ? (
+                      <Clock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    ) : probeStatus === 'browser-restricted' ? (
+                      <ShieldCheck className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+                    ) : probeStatus === 'checking' ? (
+                      <RefreshCw className="w-5 h-5 text-cyan-500 shrink-0 mt-0.5 animate-spin" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                    )}
+                    <div className="space-y-1">
+                      <span className="font-bold block text-sm sm:text-base">
+                        {probeStatus === 'open' && `Port ${portNumber} is OPEN & ACCESSIBLE`}
+                        {probeStatus === 'timeout' && `Port ${portNumber} TIMEOUT (Filtered / Firewalled)`}
+                        {probeStatus === 'closed' && `Port ${portNumber} is CLOSED (Connection Refused)`}
+                        {probeStatus === 'unknown-host' && `Target Host Unresolvable`}
+                        {probeStatus === 'browser-restricted' && `Browser Sandbox Restriction: Port ${portNumber}`}
+                        {probeStatus === 'checking' && `Probing ${portHost}:${portNumber} via Global TCP Nodes...`}
+                        {probeStatus === 'error' && `Probe Notice`}
+                      </span>
+                      <p className="text-xs font-mono text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {probeDetails?.message || (probeStatus === 'checking' ? 'Dispatching TCP SYN handshakes across independent edge sensors...' : '')}
+                      </p>
+                    </div>
                   </div>
+
+                  {probeLatency && (
+                    <div className="shrink-0 text-right">
+                      <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+                        Fastest Latency
+                      </span>
+                      <span className="text-base font-mono font-black text-emerald-600 dark:text-emerald-400">
+                        {probeLatency}ms
+                      </span>
+                    </div>
+                  )}
                 </div>
+
+                {/* Multi-Node Global Geographical Breakdown */}
+                {probeDetails?.nodeResults && probeDetails.nodeResults.length > 0 && (
+                  <div className="pt-2 border-t border-slate-200 dark:border-neutral-800/60 space-y-2">
+                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                      <span>Geographic Probe Nodes Breakdown:</span>
+                      {probeDetails.resolvedIp && (
+                        <span>Resolved IP: <strong className="text-slate-900 dark:text-white">{probeDetails.resolvedIp}</strong></span>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                      {probeDetails.nodeResults.map((node, idx) => (
+                        <div
+                          key={idx}
+                          className="p-2.5 rounded-xl bg-white/70 dark:bg-neutral-900/80 border border-slate-200/80 dark:border-neutral-800 text-xs font-mono flex items-center justify-between gap-2"
+                        >
+                          <div className="truncate">
+                            <span className="font-semibold block text-slate-800 dark:text-slate-200 truncate">
+                              {node.cityName ? `${node.cityName}, ` : ''}{node.countryName}
+                            </span>
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase">
+                              {node.countryCode} Node
+                            </span>
+                          </div>
+                          <div className="text-right shrink-0">
+                            {node.status === 'open' ? (
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                                {node.latency}ms
+                              </span>
+                            ) : node.status === 'refused' ? (
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-600 dark:text-rose-400">
+                                Refused
+                              </span>
+                            ) : node.status === 'unknown-host' ? (
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                                DNS Fail
+                              </span>
+                            ) : (
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                                Timeout
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Permanent Link or Terminal Command Helpers */}
+                {probeDetails?.permanentLink && (
+                  <div className="pt-2 flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-500 dark:text-slate-400">
+                      Independent Sensor Verification:
+                    </span>
+                    <a
+                      href={probeDetails.permanentLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 hover:underline font-semibold"
+                    >
+                      <span>View Full Sensor Log</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
+
+                {/* Terminal Commands for Localhost or Blocked Ports */}
+                {(probeDetails?.powershell || probeDetails?.bash) && (
+                  <div className="pt-3 border-t border-slate-200 dark:border-neutral-800/60 space-y-2">
+                    <span className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 block">
+                      Direct Command-Line Testing (Local Machine):
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {probeDetails.powershell && (
+                        <div className="p-3 rounded-xl bg-slate-900 text-slate-100 font-mono text-xs flex items-center justify-between gap-2">
+                          <div className="truncate">
+                            <span className="text-[10px] text-cyan-400 block font-semibold">PowerShell (Windows):</span>
+                            <code className="text-slate-200 truncate block">{probeDetails.powershell}</code>
+                          </div>
+                          <button
+                            onClick={() => copyCommandToClipboard(probeDetails.powershell, 'ps')}
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0"
+                            title="Copy PowerShell Command"
+                          >
+                            {copiedCmd === 'ps' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
+                      )}
+                      {probeDetails.bash && (
+                        <div className="p-3 rounded-xl bg-slate-900 text-slate-100 font-mono text-xs flex items-center justify-between gap-2">
+                          <div className="truncate">
+                            <span className="text-[10px] text-purple-400 block font-semibold">Bash / Netcat (Linux / Mac):</span>
+                            <code className="text-slate-200 truncate block">{probeDetails.bash}</code>
+                          </div>
+                          <button
+                            onClick={() => copyCommandToClipboard(probeDetails.bash, 'bash')}
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0"
+                            title="Copy Bash Command"
+                          >
+                            {copiedCmd === 'bash' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
