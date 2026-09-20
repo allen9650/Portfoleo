@@ -222,3 +222,4 @@ export async function computeHash(algorithm, textOrBuffer) {
     return '';
   }
 }
+
