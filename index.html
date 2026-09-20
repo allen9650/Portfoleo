@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#06b6d4" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Ahsan Raza" />
+
+    <script>
+      // Capture PWA beforeinstallprompt globally as early as possible
+      window.__pwaInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.__pwaInstallPrompt = e;
+        window.dispatchEvent(new CustomEvent('pwa-prompt-captured'));
+      });
+    </script>
+
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('portfolio-theme');
+          if (theme === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.colorScheme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Primary Meta SEO Tags -->
+    <title>Ahsan Raza | IT Officer, Network Architect & Cybersecurity Specialist</title>
+    <meta name="title" content="Ahsan Raza | IT Officer, Network Architect & Cybersecurity Specialist" />
+    <meta name="description" content="Official personal portfolio of Ahsan Raza — Information Technology Officer, BS Computer Science graduate (SALU), certified in Cyber Threat Management & Google Prompting Essentials. Dedicated pages for Experience, Skills, Projects, and Contact." />
+    <meta name="keywords" content="ahsan raza, ahsan raza portfolio, it officer, network engineer pakistan, khairpur network engineer, cyber threat management, ip addressing subnetting, cisco router vlan, next.js, mongodb, full stack development, biometric systems it officer, salu khairpur computer science" />
+    <meta name="author" content="Ahsan Raza" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://ahsanraza-tech.github.io/" />
+
+    <!-- Open Graph / Facebook / LinkedIn Social Metadata -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://ahsanraza-tech.github.io/" />
+    <meta property="og:title" content="Ahsan Raza | IT Officer, Enterprise Network Architect & Cybersecurity Specialist" />
+    <meta property="og:description" content="Personal portfolio of Ahsan Raza. Showcasing 4+ years in enterprise IT infrastructure, high-density campus LAN/WAN engineering, firewall defense, and modern web systems." />
+    <meta property="og:site_name" content="Ahsan Raza Executive Portfolio" />
+    <meta property="og:image" content="/favicon.svg" />
+
+    <!-- Twitter Card Meta -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content="https://ahsanraza-tech.github.io/" />
+    <meta name="twitter:title" content="Ahsan Raza | IT Officer & Enterprise Network Architect" />
+    <meta name="twitter:description" content="Official portfolio of Ahsan Raza. Discover career experience across enterprise IT, technical skills in networking and cyber defense, verified credentials, and real-world case studies." />
+
+    <!-- Schema.org JSON-LD Structured Data for Person Profile -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://ahsanraza-tech.github.io/#person",
+      "name": "Ahsan Raza",
+      "jobTitle": "Information Technology Officer",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Enterprise Academic Campus"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Shah Abdul Latif University (SALU), Khairpur"
+      },
+      "knowsAbout": [
+        "Enterprise LAN/WAN Architecture",
+        "IP Addressing & Subnetting",
+        "Cisco Routers & Managed Switches",
+        "Cyber Threat Management",
+        "Firewall Deployment & Hardening",
+        "Biometric Attendance & IP CCTV Surveillance",
+        "Google Prompting Essentials",
+        "Next.js",
+        "MongoDB",
+        "Full-Stack Web Development"
+      ],
+      "email": "arkolachi190@gmail.com",
+      "sameAs": [
+        "https://www.linkedin.com/in/ahsan-raza8hbb",
+        "https://github.com/ahsanraza-tech"
+      ]
+    }
+    </script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-black dark:text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-800 dark:selection:text-cyan-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
