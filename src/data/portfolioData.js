@@ -244,7 +244,8 @@ export const projects = [
     featured: true,
     tag: "Next.js & MongoDB Platform",
     role: "Full-Stack Software Engineer",
-    environment: "Web / Cloud SaaS",
+    environment: "Web / Cloud SaaS (Live)",
+    liveUrl: "https://verimoo-zeta.vercel.app/",
     description: "A web-based certificate management platform for organizations to create, manage, and verify digital certificates using unique certificate IDs.",
     highlights: [
       "Certificate creation and management lifecycle for accredited institutions",
@@ -289,7 +290,7 @@ export const projects = [
         caption: "Release changelog detailing 300 DPI PNG/PDF outputs, Vercel serverless optimizations, and multi-tier caching."
       }
     ],
-    demoLink: "/projects",
+    demoLink: "https://verimoo-zeta.vercel.app/",
     githubLink: "https://github.com/allen9650"
   },
   {
@@ -438,6 +439,7 @@ Focus: Networking, Cybersecurity & AI`,
 2. Verimoo — Certificate Management & Verification System
    Role: Full-Stack Software Engineer
    Tech: Next.js, TypeScript, React, Tailwind CSS, Shadcn UI, Node.js, MongoDB
+   Live URL: https://verimoo-zeta.vercel.app/
    Highlights: Certificate Creation & Management, Unique ID Generation, Public Verification, Verification API, Organization Branding.
 
 3. AI-Powered Legal Aid Assistant (Final Year Graduation Capstone)

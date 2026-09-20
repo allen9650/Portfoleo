@@ -118,7 +118,8 @@ export default function ProjectsPage() {
       category: "Certificate Management & Verification SaaS",
       badge: "Next.js & MongoDB Platform",
       role: "Full-Stack Software Engineer",
-      environment: "Web / Cloud SaaS & API",
+      environment: "Web / Cloud SaaS & API (Live)",
+      liveUrl: "https://verimoo-zeta.vercel.app/",
       summary: "A web-based certificate management platform for organizations to create, manage, and verify digital certificates using unique certificate IDs.",
       accentColor: "emerald",
       logo: "/images/verimoo/verimoo-logo.png",
@@ -171,7 +172,7 @@ export default function ProjectsPage() {
         { label: "Verification", value: "Unique ID Lookup" },
         { label: "Architecture", value: "Next.js SSR" },
         { label: "Database", value: "MongoDB Atlas" },
-        { label: "Integration", value: "REST Verify API" }
+        { label: "Status", value: "Live on Vercel 🌐" }
       ],
       github: "https://github.com/allen9650"
     },
@@ -758,6 +759,24 @@ export default function ProjectsPage() {
               </>
             ) : activeModalProject.id === 'verimoo' ? (
               <>
+                {/* Verimoo Live Banner */}
+                <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 text-xs text-emerald-900 dark:text-emerald-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div>
+                    <strong>🌐 Production Cloud Platform:</strong> Live certificate management and verification SaaS deployed on Vercel.
+                  </div>
+                  {activeModalProject.liveUrl && (
+                    <a
+                      href={activeModalProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition-colors shrink-0"
+                    >
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>Open Live App</span>
+                    </a>
+                  )}
+                </div>
+
                 {/* Verimoo Verification Architecture */}
                 <div className="space-y-3">
                   <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
