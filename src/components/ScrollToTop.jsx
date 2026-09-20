@@ -6,6 +6,7 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.title = 'Ahsan Raza | IT Enthusiast';
   }, [pathname]);
 
   return null;
