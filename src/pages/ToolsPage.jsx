@@ -663,7 +663,7 @@ export default function ToolsPage() {
             {
               "@type": "WebApplication",
               "name": "Network Port Checker & Risk Directory",
-              "url": "https://ahsanraza-tech.github.io/tools?tool=port-checker",
+              "url": "https://allen9650.github.io/tools?tool=port-checker",
               "applicationCategory": "UtilitiesApplication",
               "operatingSystem": "All",
               "description": "Interactive TCP/UDP port scanner test, port reference database, and firewall mitigation recommendations."
@@ -671,7 +671,7 @@ export default function ToolsPage() {
             {
               "@type": "WebApplication",
               "name": "Cryptographic Hash Generator & Verifier",
-              "url": "https://ahsanraza-tech.github.io/tools?tool=hash-generator",
+              "url": "https://allen9650.github.io/tools?tool=hash-generator",
               "applicationCategory": "SecurityApplication",
               "operatingSystem": "All",
               "description": "Client-side Web Crypto API hash generator supporting MD5, SHA-1, SHA-256, SHA-384, and SHA-512 with checksum verification."
@@ -679,7 +679,7 @@ export default function ToolsPage() {
             {
               "@type": "WebApplication",
               "name": "Bandwidth & Data Transfer Time Calculator",
-              "url": "https://ahsanraza-tech.github.io/tools?tool=bandwidth",
+              "url": "https://allen9650.github.io/tools?tool=bandwidth",
               "applicationCategory": "NetworkingApplication",
               "operatingSystem": "All",
               "description": "Calculate file download/upload times with TCP overhead, unit conversion (Mbps, MB/s, Gbps), and concurrent network sizing."
@@ -687,7 +687,7 @@ export default function ToolsPage() {
             {
               "@type": "WebApplication",
               "name": "IP CCTV Surveillance Storage & Bandwidth Calculator",
-              "url": "https://ahsanraza-tech.github.io/tools?tool=cctv",
+              "url": "https://allen9650.github.io/tools?tool=cctv",
               "applicationCategory": "SecurityApplication",
               "operatingSystem": "All",
               "description": "Calculate NVR surveillance hard drive storage, daily consumption, and network bandwidth for H.264, H.265, and H.265+ security cameras."

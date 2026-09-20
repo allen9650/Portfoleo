@@ -15,8 +15,8 @@ export const personalInfo = {
   email: "arkolachi190@gmail.com",
   secondaryEmail: "arkolachi190@gmail.com",
   linkedin: "https://www.linkedin.com/in/ahsan-raza8hbb",
-  github: "https://github.com/ahsanraza-tech",
-  medium: "https://medium.com/@ahsan-raza8hbb",
+  github: "https://github.com/allen9650",
+  medium: "https://medium.com/@ahsanrazakb",
   education: {
     degree: "Bachelor of Science - BS, Computer Science",
     institution: "Shah Abdul Latif University (SALU), Khairpur",
@@ -235,7 +235,7 @@ export const projects = [
     ],
     techStack: ["PHP", "MySQL/MariaDB", "JavaScript", "Bootstrap", "HTML/CSS"],
     demoLink: "/projects",
-    githubLink: "https://github.com/ahsanraza-tech"
+    githubLink: "https://github.com/allen9650"
   },
   {
     id: "verimoo",
@@ -290,7 +290,7 @@ export const projects = [
       }
     ],
     demoLink: "/projects",
-    githubLink: "https://github.com/ahsanraza-tech"
+    githubLink: "https://github.com/allen9650"
   },
   {
     id: "adalynn-chatbot",
@@ -341,7 +341,7 @@ export const projects = [
       }
     ],
     demoLink: "/projects",
-    githubLink: "https://github.com/ahsanraza-tech"
+    githubLink: "https://github.com/allen9650"
   },
   {
     id: "legal-aid-assistant",
@@ -395,7 +395,7 @@ export const projects = [
     ],
     techStack: ["Next.js", "React", "Tailwind CSS", "Shadcn UI", "Node.js", "NextAuth.js", "TypeScript", "MongoDB", "Google Generative AI"],
     demoLink: "https://legal-aid-assistant-by-ahsan-and-shafiullah-bn7c.vercel.app/",
-    githubLink: "https://github.com/ahsanraza-tech"
+    githubLink: "https://github.com/allen9650"
   }
 ];
 
@@ -474,7 +474,7 @@ Focus: Networking, Cybersecurity & AI`,
   contact: `Contact Channels:
 • Email        : arkolachi190@gmail.com
 • LinkedIn     : https://www.linkedin.com/in/ahsan-raza8hbb
-• Medium       : https://medium.com/@ahsan-raza8hbb
+• Medium       : https://medium.com/@ahsanrazakb
 • Location     : Sindh, Pakistan`,
 
   pwa: `[PWA INSTALLATION PACKAGE]

@@ -139,7 +139,7 @@ export default function ContactPage() {
           <div>
             <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">Medium Publication</span>
             <span className="text-xs font-bold text-slate-900 dark:text-white font-mono truncate block">
-              @ahsan-raza8hbb
+              @ahsanrazakb
             </span>
           </div>
           <a

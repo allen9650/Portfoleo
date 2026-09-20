@@ -109,7 +109,7 @@ export default function ProjectsPage() {
         { label: "Security", value: "Proctored Telemetry" },
         { label: "Access Tier", value: "Multi-Role RBAC" }
       ],
-      github: "https://github.com/ahsanraza-tech"
+      github: "https://github.com/allen9650"
     },
     {
       id: "verimoo",
@@ -173,7 +173,7 @@ export default function ProjectsPage() {
         { label: "Database", value: "MongoDB Atlas" },
         { label: "Integration", value: "REST Verify API" }
       ],
-      github: "https://github.com/ahsanraza-tech"
+      github: "https://github.com/allen9650"
     },
     {
       id: "legal-aid-assistant",
@@ -251,7 +251,7 @@ export default function ProjectsPage() {
         { label: "Database", value: "MongoDB Atlas" },
         { label: "Status", value: "Live on Vercel 🌐" }
       ],
-      github: "https://github.com/ahsanraza-tech"
+      github: "https://github.com/allen9650"
     },
     {
       id: "adalynn-chatbot",
@@ -312,7 +312,7 @@ export default function ProjectsPage() {
         { label: "Speech Engine", value: "Vosk (Offline)" },
         { label: "Voice Output", value: "pyttsx3 Audio" }
       ],
-      github: "https://github.com/ahsanraza-tech"
+      github: "https://github.com/allen9650"
     }
   ];
 
