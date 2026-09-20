@@ -721,7 +721,7 @@ export default function ToolsPage() {
           }`}
         >
           <Network className="w-4 h-4" />
-          <span>Port Checker</span>
+          <span>Port Checker (Under Development)</span>
         </button>
 
         <button
@@ -773,8 +773,11 @@ export default function ToolsPage() {
                 <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400 font-semibold uppercase tracking-wider block">
                   Diagnostic Utility
                 </span>
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
-                  Port Connectivity & Threat Assessment
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-0.5 flex flex-wrap items-center gap-2">
+                  <span>Port Checker</span>
+                  <span className="text-xs font-mono font-normal px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400">
+                    (Under Development)
+                  </span>
                 </h2>
               </div>
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">

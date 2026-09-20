@@ -482,7 +482,7 @@ Focus: Networking, Cybersecurity & AI`,
 • Access via URL: Open "/pwa" directly in your browser.`,
 
   tools: `Network & Sysadmin Toolkit (/tools):
-1. Port Checker & Threat Assessment: Client-side probe & 20+ port risk directory.
+1. Port Checker (Under Development): TCP probe & 20+ port risk directory.
 2. Cryptographic Hash Generator: MD5, SHA-1, SHA-256, SHA-384, SHA-512 & checksum verifier.
 3. Bandwidth & Transfer Calculator: Transfer time, units converter & campus user WAN sizing.
 4. IP CCTV Storage Calculator: Bitrate matrix, daily storage & NVR RAID 5 dimensioning.
