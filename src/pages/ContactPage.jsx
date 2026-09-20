@@ -13,7 +13,7 @@ import {
   Copy,
   Check
 } from 'lucide-react';
-import { LinkedinIcon, GithubIcon } from '../components/Icons';
+import { LinkedinIcon, GithubIcon, MediumIcon } from '../components/Icons';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -68,7 +68,8 @@ export default function ContactPage() {
       </div>
 
       {/* 2. Top Fast-Action Channels */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* 2. Top Fast-Action Channels */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Official Email */}
         <div className="p-5 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 transition-all card-hover-minor flex flex-col justify-between space-y-3 shadow-sm dark:shadow-none">
           <div className="flex items-center justify-between">
@@ -85,7 +86,7 @@ export default function ContactPage() {
             </button>
           </div>
           <div>
-            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">Direct Email Address</span>
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">Direct Email</span>
             <span className="text-xs font-bold text-slate-900 dark:text-white font-mono truncate block" title={personalInfo.email}>
               {personalInfo.email}
             </span>
@@ -98,30 +99,8 @@ export default function ContactPage() {
           </a>
         </div>
 
-        {/* Location & Timezone */}
-        <div className="p-5 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 transition-all card-hover-minor flex flex-col justify-between space-y-3 shadow-sm dark:shadow-none">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-500/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <span className="text-[11px] font-mono text-cyan-700 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-950/50 px-2 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-500/30 font-medium">
-              PKT (UTC+5)
-            </span>
-          </div>
-          <div>
-            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">Location</span>
-            <span className="text-xs font-bold text-slate-900 dark:text-white leading-tight block">
-              Sindh, Pakistan
-            </span>
-          </div>
-          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1.5 pt-1">
-            <Clock className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-            <span>Response &lt; 24 Hours</span>
-          </div>
-        </div>
-
         {/* LinkedIn Profile */}
-        <div className="p-5 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 transition-all flex flex-col justify-between space-y-3 shadow-sm dark:shadow-none">
+        <div className="p-5 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 transition-all card-hover-minor flex flex-col justify-between space-y-3 shadow-sm dark:shadow-none">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-sky-100 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400">
               <LinkedinIcon className="w-5 h-5" />
@@ -145,6 +124,55 @@ export default function ContactPage() {
             <span>Connect on LinkedIn</span>
             <ExternalLink className="w-3 h-3" />
           </a>
+        </div>
+
+        {/* Medium Profile / Publication */}
+        <div className="p-5 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 transition-all card-hover-minor flex flex-col justify-between space-y-3 shadow-sm dark:shadow-none">
+          <div className="flex items-center justify-between">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+              <MediumIcon className="w-5 h-5" />
+            </div>
+            <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 px-2 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-500/30 font-medium">
+              Tech Articles
+            </span>
+          </div>
+          <div>
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">Medium Publication</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white font-mono truncate block">
+              @ahsan-raza8hbb
+            </span>
+          </div>
+          <a
+            href={personalInfo.medium}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full text-center py-1.5 rounded-xl bg-emerald-100 dark:bg-emerald-600/20 border border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-xs hover:bg-emerald-200 dark:hover:bg-emerald-600/40 transition-colors flex items-center justify-center gap-1 font-medium"
+          >
+            <span>Read on Medium</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+
+        {/* Location & Timezone */}
+        <div className="p-5 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 transition-all card-hover-minor flex flex-col justify-between space-y-3 shadow-sm dark:shadow-none">
+          <div className="flex items-center justify-between">
+            <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-500/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+              <MapPin className="w-5 h-5" />
+            </div>
+            <span className="text-[11px] font-mono text-cyan-700 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-950/50 px-2 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-500/30 font-medium">
+              PKT (UTC+5)
+            </span>
+          </div>
+          <div>
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 block">Location</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white leading-tight block">
+              Sindh, Pakistan
+            </span>
+          </div>
+          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1.5 pt-1">
+            <Clock className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+            <span>Response &lt; 24 Hours</span>
+          </div>
         </div>
       </div>
 
@@ -316,6 +344,15 @@ export default function ContactPage() {
               >
                 <LinkedinIcon className="w-3.5 h-3.5" />
                 <span>LinkedIn</span>
+              </a>
+              <a
+                href={personalInfo.medium}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-700 text-xs text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-neutral-600 transition-all"
+              >
+                <MediumIcon className="w-3.5 h-3.5" />
+                <span>Medium</span>
               </a>
             </div>
           </div>

@@ -16,6 +16,7 @@ export const personalInfo = {
   secondaryEmail: "arkolachi190@gmail.com",
   linkedin: "https://www.linkedin.com/in/ahsan-raza8hbb",
   github: "https://github.com/ahsanraza-tech",
+  medium: "https://medium.com/@ahsan-raza8hbb",
   education: {
     degree: "Bachelor of Science - BS, Computer Science",
     institution: "Shah Abdul Latif University (SALU), Khairpur",
@@ -473,6 +474,7 @@ Focus: Networking, Cybersecurity & AI`,
   contact: `Contact Channels:
 • Email        : arkolachi190@gmail.com
 • LinkedIn     : https://www.linkedin.com/in/ahsan-raza8hbb
+• Medium       : https://medium.com/@ahsan-raza8hbb
 • Location     : Sindh, Pakistan`,
 
   pwa: `[PWA INSTALLATION PACKAGE]
