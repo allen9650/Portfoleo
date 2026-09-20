@@ -405,6 +405,7 @@ export const terminalCommands = {
   - projects     : View featured software deployments
   - experience   : View career positions and achievements
   - certs        : List verified technical certifications
+  - tools        : Launch Network & Sysadmin Engineering Tools
   - contact      : Display direct email, LinkedIn, and location
   - ping <host>  : Simulate ICMP network ping test
   - subnet <cidr>: Show quick subnet breakdown (e.g. subnet /24)
@@ -478,6 +479,13 @@ Focus: Networking, Cybersecurity & AI`,
 • Desktop / Android Installer: /pwa
 • Status: Standalone Progressive Web Application Ready
 • Features: Offline caching, dedicated taskbar launch, 0 MB store download.
-• Access via URL: Open "/pwa" directly in your browser.`
+• Access via URL: Open "/pwa" directly in your browser.`,
+
+  tools: `Network & Sysadmin Toolkit (/tools):
+1. Port Checker & Threat Assessment: Client-side probe & 20+ port risk directory.
+2. Cryptographic Hash Generator: MD5, SHA-1, SHA-256, SHA-384, SHA-512 & checksum verifier.
+3. Bandwidth & Transfer Calculator: Transfer time, units converter & campus user WAN sizing.
+4. IP CCTV Storage Calculator: Bitrate matrix, daily storage & NVR RAID 5 dimensioning.
+URL: Navigate to "/tools" directly in your browser.`
 };
 

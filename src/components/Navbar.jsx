@@ -22,6 +22,7 @@ export default function Navbar({ onOpenTerminal }) {
     { name: 'Experience', path: '/experience' },
     { name: 'Skills', path: '/skills' },
     { name: 'Projects', path: '/projects' },
+    { name: 'Tools', path: '/tools' },
     { name: 'Contact', path: '/contact' }
   ];
 

@@ -12,6 +12,7 @@ import ExperiencePage from './pages/ExperiencePage';
 import SkillsPage from './pages/SkillsPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ContactPage from './pages/ContactPage';
+import ToolsPage from './pages/ToolsPage';
 import PwaInstallPage from './pages/PwaInstallPage';
 
 import { Terminal, PhoneCall } from 'lucide-react';
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/experience" element={<ExperiencePage />} />
             <Route path="/skills" element={<SkillsPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/tools" element={<ToolsPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/pwa" element={<PwaInstallPage />} />
             {/* Fallback route */}

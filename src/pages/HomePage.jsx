@@ -11,7 +11,8 @@ import {
   CheckCircle2, 
   Terminal, 
   Code2,
-  Sparkles
+  Sparkles,
+  Gauge
 } from 'lucide-react';
 
 export default function HomePage({ onOpenTerminal }) {
@@ -268,8 +269,28 @@ export default function HomePage({ onOpenTerminal }) {
           </Link>
 
           <Link
+            to="/tools"
+            className="p-6 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800/90 hover:border-amber-500/50 hover:bg-slate-50 dark:hover:bg-neutral-900/80 transition-all card-hover-minor group flex flex-col justify-between shadow-sm"
+          >
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Gauge className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mb-2">
+                Network & Sysadmin Tools
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Port connectivity checker, cryptographic hash generator (MD5, SHA-256), bandwidth estimator, and IP CCTV storage calculator.
+              </p>
+            </div>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-mono text-amber-600 dark:text-amber-400 font-bold group-hover:translate-x-1 transition-transform">
+              Launch Tools <ArrowRight className="w-3.5 h-3.5" />
+            </span>
+          </Link>
+
+          <Link
             to="/contact"
-            className="p-6 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800/90 hover:border-rose-500/50 hover:bg-slate-50 dark:hover:bg-neutral-900/80 transition-all card-hover-minor group flex flex-col justify-between md:col-span-2 lg:col-span-2 shadow-sm"
+            className="p-6 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800/90 hover:border-rose-500/50 hover:bg-slate-50 dark:hover:bg-neutral-900/80 transition-all card-hover-minor group flex flex-col justify-between shadow-sm"
           >
             <div>
               <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -278,7 +299,7 @@ export default function HomePage({ onOpenTerminal }) {
               <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors mb-2">
                 Contact & Hire Ahsan Raza
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                 Get in touch directly via institutional email, GitHub, or LinkedIn for enterprise IT leadership, network engineering, and cybersecurity roles.
               </p>
             </div>

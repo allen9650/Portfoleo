@@ -46,9 +46,12 @@ export default function Footer({ onOpenTerminal }) {
           <Link to="/skills" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
             Skills
           </Link>
-          <span className="opacity-40">•</span>
           <Link to="/projects" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
             Projects
+          </Link>
+          <span className="opacity-40">•</span>
+          <Link to="/tools" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+            Tools
           </Link>
           <span className="opacity-40">•</span>
           <Link to="/contact" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
