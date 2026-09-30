@@ -1,0 +1,7 @@
+# Robots.txt for ahsanraza.space
+User-agent: *
+Allow: /
+
+# Canonical Host & XML Sitemap
+Host: https://ahsanraza.space
+Sitemap: https://ahsanraza.space/sitemap.xml

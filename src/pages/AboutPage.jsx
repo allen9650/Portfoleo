@@ -85,17 +85,17 @@ export default function AboutPage() {
               Professional Biography
             </h2>
             <p>
-              I am <strong className="text-slate-900 dark:text-white">Ahsan Raza</strong>, a Computer Science graduate from{' '}
+              I am <strong className="text-slate-900 dark:text-white">Ahsan Raza</strong> (<span className="text-slate-700 dark:text-slate-300 font-medium">Ahsan Raza Kolachi Baloch</span>), a BS Computer Science graduate from{' '}
               <span className="text-cyan-600 dark:text-cyan-400 font-semibold">{personalInfo.education.institution}</span>, based in{' '}
-              <span className="text-slate-800 dark:text-slate-200">Sindh, Pakistan</span>. My career is defined by a relentless drive to ensure digital infrastructure never goes down and technical concepts are accessible to everyone.
+              <span className="text-slate-800 dark:text-slate-200 font-semibold">Khairpur, Sindh, Pakistan</span>. My career is defined by a relentless drive to ensure mission-critical digital infrastructure remains resilient, fortified, and continuously operational.
             </p>
 
             <p>
-              As an <strong className="text-slate-900 dark:text-white">Information Technology Officer</strong>, I oversee complete campus technology ecosystems—from enterprise switches, routers, and high-density wireless access points to biometric timekeeping, IP camera surveillance, and hardware diagnostics across campus.
+              Serving as the <strong className="text-slate-900 dark:text-white">Information Technology Officer at Pak-Turk Maarif International Schools & Colleges Khairpur</strong>, I oversee the complete enterprise IT infrastructure—including pfSense firewall administration, high-density LAN/WAN network management, Cisco managed switches, campus IP camera CCTV and NVR storage matrices, biometric systems, and L1/L2 technical support.
             </p>
 
             <p>
-              Concurrently, through over <strong className="text-slate-900 dark:text-white">3.5 years of technical computing instruction</strong>, I have mentored more than 500 students in practical networking, the 7-Layer OSI Model, IPv4 subnetting, and software architecture. My pedagogy always emphasizes real-world implications: turning dry theoretical diagrams into working cables, switches, and resilient networks.
+              Previously, as an <strong className="text-slate-900 dark:text-white">IT Instructor at Microsoft Institute Khairpur</strong> for over 3.5 years, I mentored more than 500 students in practical computer networking, system administration, the 7-Layer OSI Model, IPv4 subnetting, and programming logic. My hands-on methodology connects networking theory directly with real-world infrastructure deployment.
             </p>
           </div>
 

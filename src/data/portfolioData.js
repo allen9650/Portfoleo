@@ -1,17 +1,30 @@
 export const personalInfo = {
   name: "Ahsan Raza",
-  photo: "/images/profile/ahsan-profile.jpg",
-  title: "IT & Network Support | IT Operations | Systems Support | Networking | Cybersecurity Student | AI",
-  roles: [
-    "IT & Network Support",
-    "IT Operations",
-    "Systems Support",
-    "Networking",
-    "Cybersecurity Student",
-    "AI & Automation"
+  fullName: "Ahsan Raza Kolachi Baloch",
+  aliases: [
+    "Ahsan reza",
+    "Raza Kolachi",
+    "Reza Kolachi",
+    "Ahsan Raza Kolachi Baloch",
+    "Ahsan Raza Kolachi",
+    "Ahsan Raza Baloch",
+    "Ahsan Raza IT Officer",
+    "Ahsan Raza Kolachi IT Officer",
+    "Ahsan Raza Kolachi Khairpur"
   ],
-  bio: "Computer Science graduate with extensive hands-on experience in enterprise IT infrastructure, high-density network engineering, firewall defense, and modern web systems. Proven record of orchestrating multi-campus LAN/WAN systems, mentoring over 500+ aspiring tech minds, and building robust, secure digital solutions.",
-  location: "Sindh, Pakistan",
+  photo: "/images/profile/ahsan-profile.jpg",
+  title: "IT Officer & Infrastructure Specialist | pfSense & Firewall Admin | CCTV & Systems Support",
+  roles: [
+    "IT Officer — PakTurk Maarif Khairpur",
+    "IT Infrastructure Specialist",
+    "Network Administrator Khairpur",
+    "pfSense Firewall Administrator",
+    "CCTV & IP Camera Management",
+    "Technical Support Specialist",
+    "Cybersecurity & AI"
+  ],
+  bio: "BS Computer Science graduate (SALU Khairpur) with comprehensive hands-on expertise as an Information Technology Officer and Network Infrastructure Specialist. Expert in pfSense firewall administration, enterprise LAN/WAN network management, IP camera CCTV and NVR surveillance matrices, system administration, and technical support in Khairpur, Pakistan.",
+  location: "Khairpur, Sindh, Pakistan",
   email: "arkolachi190@gmail.com",
   secondaryEmail: "arkolachi190@gmail.com",
   linkedin: "https://www.linkedin.com/in/ahsan-raza8hbb",
@@ -36,19 +49,20 @@ export const experiences = [
     id: "pakturk",
     role: "Information Technology Officer",
     company: "Pak-Turk Maarif International Schools and Colleges",
-    location: "Khairpur District, Sindh",
+    location: "Khairpur District, Sindh, Pakistan",
     period: "September 2025 - Present",
     tag: "Current Role",
     color: "cyan",
-    summary: "Spearheading entire campus IT infrastructure to ensure 24/7 high-reliability network and system operations for academic and administrative ecosystems.",
+    summary: "Spearheading entire campus IT infrastructure as IT Officer at PakTurk Maarif Khairpur to ensure 24/7 high-reliability LAN/WAN network management, pfSense firewall defense, and system operations.",
     keyResponsibilities: [
-      "Configuring, monitoring, and troubleshooting enterprise-level LAN/WAN networks, routers, managed switches, and high-density wireless access points (APs).",
-      "Deploying, hardening, and maintaining campus IP camera CCTV surveillance matrix with secure remote monitoring.",
-      "Managing biometric attendance terminals, network printer fleets, workstations, and specialized IT peripherals.",
-      "Providing rapid L1 & L2 technical diagnostics and resolution for 100+ faculty and staff members.",
+      "Configuring, monitoring, and troubleshooting enterprise LAN/WAN network infrastructure, Cisco routers, managed switches, and high-density wireless access points (APs).",
+      "Deploying, hardening, and administering pfSense firewall rules, NAT configurations, traffic shaping, and cyber threat defense.",
+      "Deploying, hardening, and maintaining campus IP camera CCTV surveillance matrix and NVR storage management with secure remote monitoring.",
+      "Managing biometric attendance terminals, network printer fleets, workstations, and system administration workflows.",
+      "Providing rapid L1 & L2 technical diagnostics and IT support specialist resolution for 100+ faculty and staff members.",
       "Performing systematic routine hardware/software maintenance, asset inventory tracking, disaster recovery, and executive technical documentation."
     ],
-    technologies: ["Cisco Routers", "Managed Switches", "Enterprise Wi-Fi APs", "IP CCTV Surveillance", "Biometric SDK", "Windows Server", "Structured Cabling", "VLSM Subnetting"]
+    technologies: ["pfSense Firewall", "Cisco Routers", "Managed Switches", "LAN/WAN Management", "IP Camera Management", "NVR Management", "CCTV Network Management", "Biometric SDK", "Windows Server", "Structured Cabling", "VLSM Subnetting", "Cybersecurity"]
   },
   {
     id: "freelance",
@@ -70,20 +84,20 @@ export const experiences = [
   {
     id: "microsoft-khp",
     role: "IT Instructor & Support Technician",
-    company: "Microsoft Institute KHP",
-    location: "Khairpur District, Sindh",
+    company: "Microsoft Institute Khairpur",
+    location: "Khairpur District, Sindh, Pakistan",
     period: "November 2021 - August 2025",
     tag: "3 Years 10 Months",
     color: "purple",
-    summary: "Educated students in core computing disciplines while concurrently maintaining the institute's network hardware, structured cabling, and computer labs.",
+    summary: "Served as IT Instructor Khairpur educating students in computer networking, system administration, and programming while maintaining institute IT infrastructure, computer labs, and structured cabling.",
     keyResponsibilities: [
-      "Instructed programming courses, networking preliminaries, IT essentials, system design, Oracle DB, and ICT.",
-      "Demystified complex networking theories like the 7-Layer OSI Model and IP Subnetting using practical, real-world packet labs.",
+      "Instructed computer networking, system administration, programming courses, IT essentials, Oracle DB, and ICT.",
+      "Demystified complex networking theories like the 7-Layer OSI Model and IPv4 Subnetting using practical, real-world packet labs.",
       "Mentored hundreds of students on capstone development projects, logic building, and hands-on hardware diagnostics.",
       "Engineered institute Wi-Fi expansion using multi-access point topologies and unmanaged/managed switches.",
       "Carried out CAT5e/CAT6 structured network cabling, RJ45 terminations, patch panel management, and connectivity diagnostics."
     ],
-    technologies: ["OSI Model", "IPv4 Subnetting", "Oracle Database", "CAT6 Structured Cabling", "Hardware Diagnostics", "Windows/Linux OS", "Lesson Planning"]
+    technologies: ["Computer Networking", "OSI Model", "IPv4 Subnetting", "System Administration", "Oracle Database", "CAT6 Structured Cabling", "Hardware Diagnostics", "Windows/Linux OS", "Technical Support"]
   }
 ];
 
@@ -93,13 +107,13 @@ export const skillsCategories = [
     icon: "Network",
     color: "cyan",
     skills: [
-      { name: "LAN / WAN Architecture", level: 95 },
+      { name: "LAN / WAN Architecture & Management", level: 95 },
       { name: "IP Addressing & Subnetting", level: 98 },
       { name: "OSI Model & Routing Protocols", level: 92 },
-      { name: "Routers & Managed Switches", level: 90 },
+      { name: "Routers & Managed Switches (Cisco)", level: 90 },
       { name: "Wireless APs & Mesh Coverage", level: 92 },
       { name: "CAT5e / CAT6 Structured Cabling", level: 95 },
-      { name: "VLANs & Traffic Segmentation (Currently Learning)", level: 50 },
+      { name: "VLANs & Traffic Segmentation", level: 50 },
       { name: "DNS, DHCP & Gateway Config", level: 90 }
     ]
   },
@@ -108,8 +122,9 @@ export const skillsCategories = [
     icon: "ShieldCheck",
     color: "emerald",
     skills: [
-      { name: "Cyber Threat Management", level: 90 },
-      { name: "Firewall Deployment & Rules", level: 88 },
+      { name: "pfSense Firewall Administration", level: 92 },
+      { name: "Firewall Administration & Filtering", level: 90 },
+      { name: "Cyber Threat Management & Defense", level: 90 },
       { name: "Vulnerability Scanning & Hardening", level: 85 },
       { name: "Network Access Control (NAC)", level: 86 },
       { name: "Incident Diagnostics & Log Audit", level: 88 },
@@ -121,12 +136,13 @@ export const skillsCategories = [
     icon: "Cpu",
     color: "blue",
     skills: [
-      { name: "L1 & L2 Technical Support", level: 96 },
+      { name: "Technical Support Specialist (L1/L2)", level: 96 },
+      { name: "IT Support Specialist & Diagnostics", level: 94 },
+      { name: "CCTV Network & NVR Management", level: 92 },
+      { name: "IP Camera Management & Storage", level: 90 },
       { name: "Biometric Attendance Systems", level: 92 },
-      { name: "IP CCTV Surveillance Setup", level: 90 },
       { name: "Hardware Repair & Diagnostics", level: 94 },
-      { name: "Peripheral & Network Printing", level: 92 },
-      { name: "IT Asset & Inventory Management", level: 90 }
+      { name: "System Administration & Inventory", level: 90 }
     ]
   },
   {
