@@ -47,7 +47,7 @@ export default function HomePage({ onOpenTerminal }) {
 
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/90 dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800 text-slate-600 dark:text-slate-400 text-xs font-mono transition-transform hover:scale-[1.02]">
                 <MapPin className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-                <span>Khairpur, Sindh, Pakistan</span>
+                <span>Sindh, Pakistan</span>
               </div>
             </div>
 
@@ -74,9 +74,9 @@ export default function HomePage({ onOpenTerminal }) {
 
             <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
               <strong className="text-slate-900 dark:text-white">BS Computer Science graduate</strong>. 
-              Serving as <strong className="text-cyan-600 dark:text-cyan-400">Information Technology Officer at PakTurk Maarif Khairpur</strong>, 
+              Serving as an <strong className="text-cyan-600 dark:text-cyan-400">Information Technology Officer</strong>, 
               orchestrating enterprise LAN/WAN network infrastructure, pfSense firewall defense, IP camera CCTV & NVR surveillance, and system administration. 
-              Former IT Instructor at Microsoft Institute Khairpur.
+              Google Prompting & VU-ITU Cyber Threat certified.
             </p>
 
             {/* Quick Action Navigation */}
