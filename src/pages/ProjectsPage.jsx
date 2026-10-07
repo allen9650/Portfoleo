@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { 
   FileText, 
@@ -750,12 +751,12 @@ export default function ProjectsPage() {
       </div>
 
       {/* 4. Deep Architecture Modal */}
-      {activeModalProject && (
+      {activeModalProject && typeof document !== 'undefined' && createPortal(
         <div 
           onClick={(e) => {
             if (e.target === e.currentTarget) setActiveModalProject(null);
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 dark:bg-black/85 backdrop-blur-md animate-in fade-in"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-slate-900/70 dark:bg-black/85 backdrop-blur-md animate-fade-in"
         >
           <div 
             ref={modalRef}
@@ -1113,13 +1114,14 @@ export default function ProjectsPage() {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 5. Fullscreen Lightbox Modal */}
-      {activeLightboxIndex !== null && lightboxImages[activeLightboxIndex] && (
+      {activeLightboxIndex !== null && lightboxImages[activeLightboxIndex] && typeof document !== 'undefined' && createPortal(
         <div 
-          className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl animate-in fade-in"
+          className="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl animate-fade-in"
           onClick={() => setActiveLightboxIndex(null)}
         >
           <div 
@@ -1178,7 +1180,8 @@ export default function ProjectsPage() {
               </p>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 6. Bottom Call to Action */}
