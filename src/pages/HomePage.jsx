@@ -260,7 +260,7 @@ export default function HomePage({ onOpenTerminal }) {
                 Projects Portfolio
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                Featured software platforms: vibe.Sınav (Offline Examination Suite), Verimoo (Digital Certificate SaaS), AI Legal Aid Assistant (Graduation Capstone), and Adalynn Chatbot (7th Sem CS-PRE-EXPO).
+                Featured software platforms: vibe.Sınav (Offline Examination Suite), Verimoo (Digital Certificate SaaS), Markaan (Bulk Photo Watermarking Engine), AI Legal Aid Assistant (Graduation Capstone), and Adalynn Chatbot (7th Sem CS-PRE-EXPO).
               </p>
             </div>
             <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-mono text-blue-600 dark:text-blue-400 font-bold group-hover:translate-x-1 transition-transform">

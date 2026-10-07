@@ -412,6 +412,38 @@ export const projects = [
     techStack: ["Next.js", "React", "Tailwind CSS", "Shadcn UI", "Node.js", "NextAuth.js", "TypeScript", "MongoDB", "Google Generative AI"],
     demoLink: "https://legal-aid-assistant-by-ahsan-and-shafiullah-bn7c.vercel.app/",
     githubLink: "https://github.com/allen9650"
+  },
+  {
+    id: "markaan",
+    title: "Markaan — Bulk Photo Watermarking Desktop & Web Application",
+    category: "Desktop & Batch Image Processing Tool",
+    featured: true,
+    tag: "Next.js & Sharp Native Engine",
+    role: "Creator & Full-Stack Developer",
+    environment: "Local Desktop Web App (Node.js & Sharp)",
+    description: "A 100% private desktop web application designed to watermark hundreds of high-resolution photos in seconds directly on your PC with zero cloud uploads, no subscriptions, live canvas positioning, and instant ZIP downloads.",
+    highlights: [
+      "100% private local execution: photos never leave your machine or upload to external clouds",
+      "High-throughput batch watermarking: processes 10, 50, 100, or 500+ photos simultaneously in seconds",
+      "Native CPU-accelerated Sharp engine for lightning-fast image compositing and format encoding",
+      "Interactive live positioning, scaling, opacity (0-100%), and rotation controls with real-time preview",
+      "Preserves original image resolution, color profiles, and EXIF metadata without compression degradation",
+      "Automated ZIP packaging streaming bundled output directly to local disk without memory bloat",
+      "One-click Windows execution via Start-Markaan.bat with automatic runtime dependency resolution"
+    ],
+    keyFeatures: [
+      "100% Private Local Processing (Zero Cloud)",
+      "Bulk Batch Processing (500+ Photos)",
+      "High-Speed Sharp Engine",
+      "Live Canvas Positioning & Opacity Preview",
+      "Lossless Quality Preservation",
+      "Automated ZIP File Bundling",
+      "1-Click Windows Launcher (Start-Markaan.bat)",
+      "Multi-Format Support (JPEG, PNG, WebP)"
+    ],
+    techStack: ["Next.js", "React", "Node.js", "Sharp", "Tailwind CSS", "Radix UI", "JavaScript", "Batch Script"],
+    demoLink: "/projects",
+    githubLink: "https://github.com/allen9650/markaan"
   }
 ];
 
@@ -457,13 +489,19 @@ Focus: Networking, Cybersecurity & AI`,
    Live URL: https://verimoo-zeta.vercel.app/
    Highlights: Certificate Creation & Management, Unique ID Generation, Public Verification, Verification API, Organization Branding.
 
-3. AI-Powered Legal Aid Assistant (Final Year Graduation Capstone)
+3. Markaan — Bulk Photo Watermarking Desktop & Web Application
+   Role: Creator & Full-Stack Developer
+   Tech: Next.js, React, Node.js, Sharp, Tailwind CSS, Radix UI
+   GitHub: https://github.com/allen9650/markaan
+   Highlights: 100% Private Local Processing, Batch Watermarking (500+ Photos), Sharp Engine, Live Canvas Positioning, Automated ZIP Export.
+
+4. AI-Powered Legal Aid Assistant (Final Year Graduation Capstone)
    Role: Lead Full-Stack Developer & AI Architect (with Muhammad Shafiullah)
    Tech: Next.js, Google Generative AI, NextAuth.js, MongoDB, Tailwind CSS, Shadcn UI
    Live URL: https://legal-aid-assistant-by-ahsan-and-shafiullah-bn7c.vercel.app/
    Highlights: Google Generative AI, Legal Branch FAQs, NextAuth OAuth, Presented at SALU Exhibition.
 
-4. Adalynn Chatbot — Voice Assistant & Speech UI (7th Semester CS-PRE-EXPO Project)
+5. Adalynn Chatbot — Voice Assistant & Speech UI (7th Semester CS-PRE-EXPO Project)
    Role: Lead Developer & Speech AI Engineer
    Tech: Python, Vosk, pyttsx3, Tkinter, Matplotlib, NumPy, PyAudio
    Event: SALU CS-PRE-EXPO 2024 (7th Semester — 30th April 2024)

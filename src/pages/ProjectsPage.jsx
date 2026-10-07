@@ -314,17 +314,60 @@ export default function ProjectsPage() {
         { label: "Voice Output", value: "pyttsx3 Audio" }
       ],
       github: "https://github.com/allen9650"
+    },
+    {
+      id: "markaan",
+      title: "Markaan — Bulk Photo Watermarking Desktop & Web Application",
+      shortTitle: "Markaan",
+      category: "Desktop & Batch Image Processing Tool",
+      badge: "Next.js & Sharp Engine",
+      role: "Creator & Full-Stack Developer",
+      environment: "Local Desktop Web App (Node.js & Sharp)",
+      summary: "A 100% private desktop web application designed to watermark hundreds of high-resolution photos in seconds directly on your PC with zero cloud uploads, no subscriptions, live canvas positioning, and instant ZIP downloads.",
+      accentColor: "amber",
+      technologies: [
+        { name: "Next.js", category: "Full-Stack Framework", desc: "React App Router with server-side API routes and static asset optimization" },
+        { name: "Sharp", category: "Image Processing Engine", desc: "High-performance native C++ image processing library powered by libvips" },
+        { name: "React", category: "Interactive UI", desc: "Real-time canvas preview, drag-and-drop batch dropzone, and responsive layout" },
+        { name: "Node.js", category: "Local Server Runtime", desc: "Local asynchronous file streaming, multi-core worker threads, and memory management" },
+        { name: "Tailwind CSS", category: "Design System", desc: "Utility-first modern interface with crisp dark/light responsive layout" },
+        { name: "Radix UI", category: "Component Primitives", desc: "Accessible slider, dialog, and switch controls for fine-tuned watermark adjustments" },
+        { name: "Archiver / ZIP", category: "Archive Streamer", desc: "High-speed streaming ZIP packaging bundling hundreds of outputs directly to disk" }
+      ],
+      features: [
+        { title: "100% Private On-Device Processing", desc: "Photos never leave your computer. No third-party cloud servers, zero security compromises for event/student photos." },
+        { title: "High-Throughput Batch Engine", desc: "Watermark 10, 50, 100, or 500+ photos in seconds using multi-threaded CPU image pipeline." },
+        { title: "Live Real-Time Visual Preview", desc: "Interactive positioning, logo scaling, opacity sliders (0-100%), and rotation with immediate canvas rendering." },
+        { title: "Zero Compression Loss", desc: "Preserves high-resolution source quality, original color profiles, and camera metadata without degradation." },
+        { title: "Automated ZIP Export", desc: "One-click batch processing packages all finished images into a clean, ready-to-share ZIP file." },
+        { title: "1-Click Windows Launcher", desc: "Start-Markaan.bat script automatically verifies Node.js, installs prerequisites, and opens localhost:3000." },
+        { title: "Flexible Watermark Placement", desc: "Nine preset quadrant anchors plus custom pixel offsets for exact logo positioning." },
+        { title: "Multi-Format Support", desc: "Flawless batch handling across JPEG, PNG, WebP, and common camera raster formats." }
+      ],
+      installation: {
+        command: "git clone https://github.com/allen9650/markaan.git && cd markaan && npm install && npm run dev",
+        quickLaunch: "Or double-click 'Start-Markaan.bat' in the project directory for 1-click launch on Windows",
+        prerequisites: "Node.js (LTS >= 18.x)"
+      },
+      metrics: [
+        { label: "Privacy Tier", value: "100% Local" },
+        { label: "Throughput", value: "500+ Batch" },
+        { label: "Engine", value: "Sharp / C++" },
+        { label: "Output", value: "Lossless ZIP" }
+      ],
+      github: "https://github.com/allen9650/markaan"
     }
   ];
 
-  const categories = ['All', 'Offline & LAN Systems', 'Cloud & SaaS Platforms', 'AI & Legal Tech', 'University Final Year Projects'];
+  const categories = ['All', 'Offline & LAN Systems', 'Desktop & Creative Tools', 'Cloud & SaaS Platforms', 'AI & Legal Tech', 'University Capstones'];
 
   const filteredProjects = projects.filter(p => {
     if (selectedCategory === 'All') return true;
     if (selectedCategory === 'Offline & LAN Systems') return p.id === 'vibe-sinav';
+    if (selectedCategory === 'Desktop & Creative Tools') return p.id === 'markaan';
     if (selectedCategory === 'Cloud & SaaS Platforms') return p.id === 'verimoo';
     if (selectedCategory === 'AI & Legal Tech') return p.id === 'legal-aid-assistant';
-    if (selectedCategory === 'University Final Year Projects') return p.id === 'legal-aid-assistant' || p.id === 'adalynn-chatbot';
+    if (selectedCategory === 'University Capstones') return p.id === 'legal-aid-assistant' || p.id === 'adalynn-chatbot';
     return true;
   });
 
@@ -340,7 +383,7 @@ export default function ProjectsPage() {
           Featured Software Platforms
         </h1>
         <p className="mt-3 text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl">
-          Real-world applications and engineering systems built by Ahsan Raza — spanning campus examination networks, cloud verification SaaS, and university AI capstone projects.
+          Real-world applications and engineering systems built by Ahsan Raza — spanning campus examination networks, cloud verification SaaS, desktop utilities, and university AI capstone projects.
         </p>
       </div>
 
@@ -349,9 +392,14 @@ export default function ProjectsPage() {
         {categories.map((cat) => {
           const count = cat === 'All' 
             ? projects.length 
-            : cat === 'University Capstones & Practice' 
-            ? 2 
-            : 1;
+            : projects.filter(p => {
+                if (cat === 'Offline & LAN Systems') return p.id === 'vibe-sinav';
+                if (cat === 'Desktop & Creative Tools') return p.id === 'markaan';
+                if (cat === 'Cloud & SaaS Platforms') return p.id === 'verimoo';
+                if (cat === 'AI & Legal Tech') return p.id === 'legal-aid-assistant';
+                if (cat === 'University Capstones') return p.id === 'legal-aid-assistant' || p.id === 'adalynn-chatbot';
+                return false;
+              }).length;
           return (
             <button
               key={cat}
@@ -375,6 +423,7 @@ export default function ProjectsPage() {
           const isEmerald = proj.accentColor === 'emerald';
           const isBlue = proj.accentColor === 'blue';
           const isPurple = proj.accentColor === 'purple';
+          const isAmber = proj.accentColor === 'amber';
 
           return (
             <div
@@ -390,6 +439,8 @@ export default function ProjectsPage() {
                     ? 'bg-gradient-to-bl from-emerald-500/10 via-teal-500/5 to-transparent'
                     : isBlue
                     ? 'bg-gradient-to-bl from-blue-500/15 via-indigo-500/5 to-transparent'
+                    : isAmber
+                    ? 'bg-gradient-to-bl from-amber-500/15 via-orange-500/5 to-transparent'
                     : 'bg-gradient-to-bl from-purple-500/10 via-indigo-500/5 to-transparent'
                 }`} 
               />
@@ -404,6 +455,8 @@ export default function ProjectsPage() {
                       ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
                       : isBlue
                       ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30'
+                      : isAmber
+                      ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
                       : 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/30'
                   }`}>
                     {proj.badge}
@@ -444,6 +497,10 @@ export default function ProjectsPage() {
                   <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-500/30 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0 shadow-md shadow-purple-500/10">
                     <Mic className="w-8 h-8" />
                   </div>
+                ) : isAmber ? (
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0 shadow-md shadow-amber-500/10">
+                    <ImageIcon className="w-8 h-8" />
+                  </div>
                 ) : null}
 
                 <div className="space-y-2">
@@ -465,6 +522,7 @@ export default function ProjectsPage() {
                       isCyan ? 'text-cyan-600 dark:text-cyan-400' 
                       : isEmerald ? 'text-emerald-600 dark:text-emerald-400' 
                       : isBlue ? 'text-blue-600 dark:text-blue-400'
+                      : isAmber ? 'text-amber-600 dark:text-amber-400'
                       : 'text-purple-600 dark:text-purple-400'
                     }`}>
                       {m.value}
@@ -551,6 +609,7 @@ export default function ProjectsPage() {
                           isCyan ? 'text-cyan-600 dark:text-cyan-400' 
                           : isEmerald ? 'text-emerald-600 dark:text-emerald-400' 
                           : isBlue ? 'text-blue-600 dark:text-blue-400'
+                          : isAmber ? 'text-amber-600 dark:text-amber-400'
                           : 'text-purple-600 dark:text-purple-400'
                         }`} />
                         <span className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
@@ -581,6 +640,7 @@ export default function ProjectsPage() {
                         isCyan ? 'bg-cyan-500' 
                         : isEmerald ? 'bg-emerald-500' 
                         : isBlue ? 'bg-blue-500'
+                        : isAmber ? 'bg-amber-500'
                         : 'bg-purple-500'
                       }`} />
                       {t.name}
@@ -600,6 +660,8 @@ export default function ProjectsPage() {
                       ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]'
                       : isBlue
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]'
+                      : isAmber
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)]'
                       : 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]'
                   }`}
                 >
@@ -617,6 +679,16 @@ export default function ProjectsPage() {
                     <Globe className="w-4 h-4" />
                     <span>Try Live App 🌐</span>
                   </a>
+                )}
+
+                {proj.id === 'markaan' && (
+                  <button
+                    onClick={() => setActiveModalProject(proj)}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-500/40 text-amber-700 dark:text-amber-300 text-xs sm:text-sm font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/60 transition-colors cursor-pointer"
+                  >
+                    <Terminal className="w-4 h-4" />
+                    <span>View Launcher & Setup</span>
+                  </button>
                 )}
 
                 <a
@@ -754,6 +826,67 @@ export default function ProjectsPage() {
                       <li>High-concurrency session handler optimized for 100+ simultaneous laboratory workstations.</li>
                       <li>Zero external CDN dependencies — all stylesheets, scripts, and fonts bundled locally.</li>
                     </ul>
+                  </div>
+                </div>
+              </>
+            ) : activeModalProject.id === 'markaan' ? (
+              <>
+                {/* Markaan Privacy Banner */}
+                <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 text-xs text-amber-900 dark:text-amber-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div>
+                    <strong>🔒 100% Private On-Device Processing:</strong> Images never leave the host computer — zero cloud uploads, zero privacy risk, and zero bandwidth overhead.
+                  </div>
+                  <a
+                    href={activeModalProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors shrink-0"
+                  >
+                    <GithubIcon className="w-3.5 h-3.5" />
+                    <span>View GitHub Repo</span>
+                  </a>
+                </div>
+
+                {/* Markaan Core Engineering Highlights */}
+                <div className="space-y-3">
+                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-amber-500" />
+                    <span>Sharp Image Engine & Architecture Deep-Dive</span>
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Native C++ Sharp Engine (libvips)</strong>
+                      <p className="text-slate-600 dark:text-slate-400">Employs native multithreaded libvips bindings via Node.js Sharp to batch process 500+ high-resolution photos in seconds without blocking event threads.</p>
+                    </div>
+                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Visual Watermark Positioning Canvas</strong>
+                      <p className="text-slate-600 dark:text-slate-400">Interactive live positioning canvas supporting 9 cardinal anchor presets (center, corners, edges), fine pixel coordinate offsets, and 0-100% opacity sliders.</p>
+                    </div>
+                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Lossless Quality & Color Space Preservation</strong>
+                      <p className="text-slate-600 dark:text-slate-400">Preserves original image dimensions, DPI metadata, and sRGB/P3 color gamuts across JPEG, PNG, and WebP raster formats.</p>
+                    </div>
+                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Streaming ZIP Archiver Packaging</strong>
+                      <p className="text-slate-600 dark:text-slate-400">Pipes watermarked memory buffers directly into continuous compression streams via <code>archiver</code>, preventing memory exhaustion and enabling instant download.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Markaan Quick Setup & Windows Launcher */}
+                <div className="space-y-3">
+                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
+                    <Terminal className="w-4 h-4 text-amber-500" />
+                    <span>Quick Setup & Desktop Launcher</span>
+                  </h4>
+                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-2.5">
+                    <p>Designed for immediate plug-and-play desktop execution:</p>
+                    <div className="bg-slate-900 text-emerald-400 p-3 rounded-xl font-mono text-[11px] overflow-x-auto border border-slate-800">
+                      <code>git clone https://github.com/allen9650/markaan.git<br />cd markaan<br />npm install<br />npm run dev</code>
+                    </div>
+                    <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                      🚀 <strong>1-Click Windows Launcher:</strong> Includes <code>Start-Markaan.bat</code> in the repository root to automatically launch the Node server and open your default browser.
+                    </p>
                   </div>
                 </div>
               </>
