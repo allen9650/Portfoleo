@@ -137,16 +137,9 @@ export default function AboutPage() {
           <div className="relative group w-full max-w-sm rounded-3xl p-1 bg-gradient-to-b from-cyan-500/40 via-purple-500/20 to-slate-300 dark:to-neutral-800/80 shadow-xl">
             <div className="rounded-[22px] bg-white dark:bg-black p-6 flex flex-col items-center text-center space-y-4 border border-slate-200 dark:border-neutral-800">
               {/* Executive Monogram & Cyber Node Emblem */}
-              <div className="relative w-36 h-36 rounded-2xl overflow-hidden border-2 border-cyan-500/50 shadow-xl bg-gradient-to-br from-slate-100 via-white to-cyan-100/60 dark:from-neutral-900 dark:via-black dark:to-cyan-950/60 flex flex-col items-center justify-center">
+              <div className="relative w-36 h-36 rounded-2xl overflow-hidden border border-slate-200 dark:border-neutral-800 shadow-xl bg-gradient-to-br from-slate-100 via-white to-slate-100 dark:from-neutral-900 dark:via-black dark:to-neutral-900 flex flex-col items-center justify-center">
                 <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-slate-950 font-black text-3xl shadow-lg">
                   AR
-                </div>
-                <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 mt-2 font-bold tracking-wider">
-                  VERIFIED PROFILE
-                </span>
-                <div className="absolute top-2 right-2 flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </div>
               </div>
 
@@ -161,7 +154,7 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              {/* Verified Checklist */}
+              {/* Key Highlights Checklist */}
               <div className="w-full text-left space-y-2 pt-2 border-t border-slate-200 dark:border-neutral-800 text-xs text-slate-700 dark:text-slate-300">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
@@ -228,7 +221,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Verified Certifications Showcase */}
+      {/* Certifications Showcase */}
       <section className="space-y-6">
         <div className="text-center">
           <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block mb-1">

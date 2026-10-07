@@ -106,7 +106,7 @@ export default function ContactPage() {
               <LinkedinIcon className="w-5 h-5" />
             </div>
             <span className="text-[11px] font-mono text-sky-700 dark:text-sky-400 bg-sky-100 dark:bg-sky-950/50 px-2 py-0.5 rounded-full border border-sky-300 dark:border-sky-500/30 font-medium">
-              Verified Profile
+              Direct Profile
             </span>
           </div>
           <div>
@@ -321,10 +321,10 @@ export default function ContactPage() {
           <div className="p-6 rounded-3xl bg-white/95 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 space-y-3 shadow-sm dark:shadow-none">
             <h4 className="text-xs font-mono uppercase text-cyan-700 dark:text-cyan-400 flex items-center gap-2 font-semibold">
               <ShieldCheck className="w-4 h-4" />
-              <span>Verified Identity & Background</span>
+              <span>Professional Background</span>
             </h4>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              All credentials, degrees from Shah Abdul Latif University (BSCS, 2025), Google Prompting certifications, and VU-ITU Cyber Threat credentials have been validated.
+              Degree in Computer Science from Shah Abdul Latif University (BSCS, 2025), Google Prompting certifications, and VU-ITU Cyber Threat credentials.
             </p>
             <div className="pt-2 flex items-center gap-3">
               <a

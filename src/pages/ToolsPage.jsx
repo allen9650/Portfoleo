@@ -1307,7 +1307,7 @@ export default function ToolsPage() {
                 <span>Verify Against Official Vendor Checksum:</span>
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-mono">
-                Paste the checksum provided by a software publisher (e.g. Cisco ISO, Linux Distro, BIOS update) to verify authenticity and detect file tampering.
+                Paste the checksum provided by a software publisher (e.g. Cisco ISO, Linux Distro, BIOS update) to compare digests and detect file tampering.
               </p>
               <input
                 type="text"
@@ -1326,7 +1326,7 @@ export default function ToolsPage() {
                   {checksumMatch.match ? (
                     <>
                       <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                      <span>MATCH VERIFIED! The hash perfectly matches your {checksumMatch.algorithm} digest. File integrity is 100% intact.</span>
+                      <span>MATCH CONFIRMED! The hash matches your {checksumMatch.algorithm} digest. File integrity intact.</span>
                     </>
                   ) : (
                     <>

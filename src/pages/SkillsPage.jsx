@@ -31,12 +31,12 @@ export default function SkillsPage() {
     Code2: Code2
   };
 
-  // Verified Top Skills from profile.pdf
-  const verifiedTopSkills = [
+  // Core Technical Skills
+  const coreSkills = [
     {
       title: "IP Addressing & Subnetting",
       level: 98,
-      issuer: "Verified Credential",
+      issuer: "Enterprise Networking",
       description: "Mastery of Classful/CIDR IPv4 architectures, VLSM design, host calculations, subnet masking, and zero-waste address allocation for multi-segment campuses.",
       tag: "Top Ranked Skill"
     },
@@ -175,19 +175,19 @@ export default function SkillsPage() {
           Skills & Technical Matrix
         </h1>
         <p className="mt-3 text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl">
-          Verified hands-on competencies across enterprise network infrastructure, cyber threat hardening, full-stack development, and classroom instruction.
+          Hands-on competencies across enterprise network infrastructure, cyber threat hardening, full-stack development, and classroom instruction.
         </p>
       </div>
 
-      {/* 2. Top Verified Skills Section */}
+      {/* 2. Core Skills Section */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-              <span>Verified Top Skills</span>
+              <span>Core Technical Skills</span>
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Validated competencies from profile.pdf & production deployments</p>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Primary competencies across production deployments & instruction</p>
           </div>
           <span className="text-xs font-mono text-cyan-700 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-200 dark:border-cyan-500/30 hidden sm:inline-block font-semibold">
             6 Primary Pillars
@@ -195,7 +195,7 @@ export default function SkillsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {verifiedTopSkills.map((skill, i) => (
+          {coreSkills.map((skill, i) => (
             <div
               key={i}
               className="p-6 rounded-3xl bg-white/90 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 hover:bg-slate-50 dark:hover:bg-neutral-900/90 transition-all group relative overflow-hidden shadow-sm dark:shadow-none"
@@ -379,7 +379,7 @@ export default function SkillsPage() {
               <span>Full Categorized Technical Inventory</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-              Filter through all {skillsCategories.reduce((acc, cat) => acc + cat.skills.length, 0)} verified technical skillsets
+              Filter through all {skillsCategories.reduce((acc, cat) => acc + cat.skills.length, 0)} technical skillsets
             </p>
           </div>
 

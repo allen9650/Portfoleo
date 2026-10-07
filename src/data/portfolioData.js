@@ -165,7 +165,7 @@ export const certifications = [
   {
     title: "Google Prompting Essentials",
     issuer: "Google",
-    date: "Verified Credential",
+    date: "Google Credential",
     badge: "AI Mastery",
     icon: "Sparkles",
     description: "Expert techniques in generative AI prompt engineering, iterative prompt refinement, automated workflows, and complex task chaining.",
@@ -174,7 +174,7 @@ export const certifications = [
   {
     title: "Cyber Threat Management",
     issuer: "VU - ITU - Digital Training Center (DTC)",
-    date: "Verified Certification",
+    date: "VU-ITU DTC",
     badge: "Security Defense",
     icon: "ShieldAlert",
     description: "Deep examination of cyber threat vectors, malware mitigation, defense-in-depth architecture, packet sniffers, and incident response.",
@@ -453,7 +453,7 @@ export const terminalCommands = {
   - skills       : List core technical competencies
   - projects     : View featured software deployments
   - experience   : View career positions and achievements
-  - certs        : List verified technical certifications
+  - certs        : List technical certifications
   - tools        : Launch Network & Sysadmin Engineering Tools
   - contact      : Display direct email, LinkedIn, and location
   - ping <host>  : Simulate ICMP network ping test
@@ -518,13 +518,13 @@ Focus: Networking, Cybersecurity & AI`,
    Role: IT Instructor & Support Technician (Nov 2021 - Aug 2025)
    Scope: Taught OSI, Subnetting, Coding, Oracle DB. Managed lab networks & CAT cabling.`,
 
-  certs: `Verified Certifications:
+  certs: `Technical Certifications:
 • Google Prompting Essentials (Google)
 • VU-ITU-DTC Cyber Threat Management (VU-ITU)
 • Technical Domain: Web Development Training
 • Introduction to Cybersecurity
 • Elements of AI (University of Helsinki)
-• BS Computer Science (Shah Abdul Latif University Khairpur, 2025)`,
+• BS Computer Science (Shah Abdul Latif University, 2025)`,
 
   contact: `Contact Channels:
 • Email        : arkolachi190@gmail.com

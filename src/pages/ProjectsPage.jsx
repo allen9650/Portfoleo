@@ -127,7 +127,7 @@ export default function ProjectsPage() {
         {
           title: "Public Instant Verification Portal",
           src: "/images/verimoo/verimoo-verify-landing.png",
-          caption: "Public certificate search allowing employers and verification agencies to validate authenticity with a unique serial ID.",
+          caption: "Public certificate search allowing employers and institutions to check credentials with a unique serial ID.",
           tag: "Dark Mode UI"
         },
         {
@@ -161,7 +161,7 @@ export default function ProjectsPage() {
       features: [
         { title: "Certificate Creation & Management", desc: "Complete credential lifecycle from batch generation to issuance, updates, and secure revocation." },
         { title: "Unique Certificate ID Generation", desc: "Algorithmic and cryptographic unique identifier generator ensuring zero collision and tamper-proof verification." },
-        { title: "Public Certificate Verification", desc: "Instant public verification lookup portal where employers and auditors validate credential authenticity in seconds." },
+        { title: "Public Certificate Verification", desc: "Instant public lookup portal where employers and auditors check and validate credentials in seconds." },
         { title: "Admin Dashboard", desc: "Intuitive executive control center for managing organizations, issued credentials, audit trails, and usage metrics." },
         { title: "Digital Certificate Generation", desc: "Pixel-perfect automated certificate rendering engine with dynamic recipient details, dates, and sign-offs." },
         { title: "Downloadable Certificate Output", desc: "High-resolution print-ready PDF and vector downloads with embedded QR codes and validation links." },

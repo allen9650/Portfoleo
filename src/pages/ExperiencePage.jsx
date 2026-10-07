@@ -93,8 +93,8 @@ export default function ExperiencePage() {
               </div>
             </div>
 
-            <div className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-700 text-xs font-mono text-emerald-700 dark:text-emerald-400 self-start sm:self-auto font-medium">
-              Verified Experience
+            <div className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs font-mono text-slate-600 dark:text-slate-400 self-start sm:self-auto font-medium">
+              {active.tag}
             </div>
           </div>
 
