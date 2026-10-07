@@ -1,9 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { personalInfo } from '../data/portfolioData';
 import { ArrowUp, Terminal, Shield, Heart } from 'lucide-react';
 
 export default function Footer({ onOpenTerminal }) {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -25,39 +28,41 @@ export default function Footer({ onOpenTerminal }) {
           </div>
         </div>
 
-        {/* Quick Route Links */}
-        <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-slate-600 dark:text-slate-400">
-          <button
-            onClick={onOpenTerminal}
-            className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Terminal className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
-            <span>CLI</span>
-          </button>
-          <span className="opacity-40">•</span>
-          <Link to="/about" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-            About
-          </Link>
-          <span className="opacity-40">•</span>
-          <Link to="/experience" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-            Experience
-          </Link>
-          <span className="opacity-40">•</span>
-          <Link to="/skills" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-            Skills
-          </Link>
-          <Link to="/projects" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-            Projects
-          </Link>
-          <span className="opacity-40">•</span>
-          <Link to="/tools" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-            Tools
-          </Link>
-          <span className="opacity-40">•</span>
-          <Link to="/contact" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-            Contact
-          </Link>
-        </div>
+        {/* Quick Route Links (hidden on landing page only) */}
+        {!isLandingPage && (
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-slate-600 dark:text-slate-400">
+            <button
+              onClick={onOpenTerminal}
+              className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Terminal className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+              <span>CLI</span>
+            </button>
+            <span className="opacity-40">•</span>
+            <Link to="/about" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+              About
+            </Link>
+            <span className="opacity-40">•</span>
+            <Link to="/experience" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+              Experience
+            </Link>
+            <span className="opacity-40">•</span>
+            <Link to="/skills" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+              Skills
+            </Link>
+            <Link to="/projects" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+              Projects
+            </Link>
+            <span className="opacity-40">•</span>
+            <Link to="/tools" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+              Tools
+            </Link>
+            <span className="opacity-40">•</span>
+            <Link to="/contact" className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+              Contact
+            </Link>
+          </div>
+        )}
 
         {/* Back to top */}
         <button
