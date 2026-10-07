@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FileText, 
@@ -48,6 +48,29 @@ export default function ProjectsPage() {
   const [activeLightboxIndex, setActiveLightboxIndex] = useState(null);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [copiedInstallCmd, setCopiedInstallCmd] = useState(false);
+  const modalRef = useRef(null);
+
+  // Lock body scroll and handle Escape for modal
+  useEffect(() => {
+    if (activeModalProject) {
+      document.body.style.overflow = 'hidden';
+      if (modalRef.current) {
+        modalRef.current.scrollTop = 0;
+      }
+    } else {
+      document.body.style.overflow = '';
+    }
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveModalProject(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeModalProject]);
 
   // Close lightbox on Escape key and navigate with arrows
   useEffect(() => {
@@ -728,390 +751,340 @@ export default function ProjectsPage() {
 
       {/* 4. Deep Architecture Modal */}
       {activeModalProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/85 backdrop-blur-md animate-in fade-in">
-          <div className="relative w-full max-w-3xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
-            {/* Close button */}
-            <button
-              onClick={() => setActiveModalProject(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 dark:bg-neutral-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-neutral-800 transition-all cursor-pointer"
-              aria-label="Close modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <div 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setActiveModalProject(null);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 dark:bg-black/85 backdrop-blur-md animate-in fade-in"
+        >
+          <div 
+            ref={modalRef}
+            className="relative w-full max-w-5xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-3xl p-4 sm:p-6 shadow-2xl space-y-4 max-h-[88vh] overflow-y-auto"
+          >
+            {/* Modal Header Bar */}
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-neutral-800">
+              <div className="flex items-center gap-3 min-w-0">
+                {activeModalProject.logo ? (
+                  <img 
+                    src={activeModalProject.logo} 
+                    alt="Logo" 
+                    className="w-10 h-10 rounded-xl object-contain bg-slate-100 dark:bg-black p-1 border border-slate-200 dark:border-neutral-800 shadow-sm shrink-0"
+                  />
+                ) : activeModalProject.id === 'legal-aid-assistant' ? (
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                    <Scale className="w-5 h-5" />
+                  </div>
+                ) : activeModalProject.id === 'adalynn-chatbot' ? (
+                  <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-500/30 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
+                    <Mic className="w-5 h-5" />
+                  </div>
+                ) : activeModalProject.id === 'markaan' ? (
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                    <ImageIcon className="w-5 h-5" />
+                  </div>
+                ) : null}
 
-            {/* Modal Header */}
-            <div className="flex items-start gap-4">
-              {activeModalProject.logo ? (
-                <img 
-                  src={activeModalProject.logo} 
-                  alt="Logo" 
-                  className="w-14 h-14 rounded-2xl object-contain bg-white dark:bg-black p-1.5 border border-slate-200 dark:border-neutral-800 shadow-md shrink-0"
-                />
-              ) : activeModalProject.id === 'legal-aid-assistant' ? (
-                <div className="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
-                  <Scale className="w-7 h-7" />
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate">
+                      {activeModalProject.title}
+                    </h2>
+                    <span className={`text-[11px] font-mono px-2 py-0.5 rounded border font-semibold shrink-0 ${
+                      activeModalProject.accentColor === 'cyan'
+                        ? 'bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-400 border-cyan-200 dark:border-cyan-500/30'
+                        : activeModalProject.accentColor === 'emerald'
+                        ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30'
+                        : activeModalProject.accentColor === 'blue'
+                        ? 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30'
+                        : activeModalProject.accentColor === 'amber'
+                        ? 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/30'
+                        : 'bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/30'
+                    }`}>
+                      {activeModalProject.badge}
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 hidden md:inline">
+                      • {activeModalProject.environment}
+                    </span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-mono truncate">
+                    Role: <strong className="text-slate-800 dark:text-slate-200">{activeModalProject.role}</strong> {activeModalProject.collaborator && `• ${activeModalProject.collaborator}`}
+                  </p>
                 </div>
-              ) : activeModalProject.id === 'adalynn-chatbot' ? (
-                <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-500/30 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
-                  <Mic className="w-7 h-7" />
-                </div>
-              ) : null}
+              </div>
 
-              <div>
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className={`text-xs font-mono px-2.5 py-0.5 rounded-md border font-semibold ${
-                    activeModalProject.accentColor === 'cyan'
-                      ? 'bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-400 border-cyan-200 dark:border-cyan-500/30'
-                      : activeModalProject.accentColor === 'emerald'
-                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30'
-                      : activeModalProject.accentColor === 'blue'
-                      ? 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30'
-                      : 'bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/30'
-                  }`}>
-                    {activeModalProject.badge}
-                  </span>
-                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-                    {activeModalProject.environment}
-                  </span>
-                </div>
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                  {activeModalProject.title}
-                </h2>
-                <p className="text-xs sm:text-sm text-cyan-700 dark:text-cyan-400 font-mono mt-0.5">
-                  Role: {activeModalProject.role} {activeModalProject.collaborator && `• ${activeModalProject.collaborator}`}
-                </p>
+              {/* Header Right Actions & Close */}
+              <div className="flex items-center gap-2 shrink-0">
+                {activeModalProject.liveUrl && (
+                  <a
+                    href={activeModalProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>Live Demo</span>
+                  </a>
+                )}
+                {activeModalProject.github && (
+                  <a
+                    href={activeModalProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:text-white transition-colors"
+                  >
+                    <GithubIcon className="w-3.5 h-3.5" />
+                    <span>Repo</span>
+                  </a>
+                )}
+                <button
+                  onClick={() => setActiveModalProject(null)}
+                  className="p-1.5 rounded-full bg-slate-100 dark:bg-neutral-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-neutral-800 transition-all cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
             </div>
 
             {/* Project Specific Architecture Breakdown */}
             {activeModalProject.id === 'vibe-sinav' ? (
               <>
-                {/* Anti-Cheating Telemetry Mechanics */}
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
                     <ShieldAlert className="w-4 h-4 text-rose-500" />
                     <span>Anti-Cheating Telemetry & Proctoring Engine</span>
                   </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
                       <strong className="text-slate-900 dark:text-white block">Fullscreen Enforcement</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Tracks HTML5 Fullscreen API exit events. Automatically prompts warnings and records infractions to the proctoring log.</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Tracks HTML5 Fullscreen API exits. Automatically prompts warnings and records infractions to proctor log.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
                       <strong className="text-slate-900 dark:text-white block">Tab-Switch & Blur Detection</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Listens to `visibilitychange` and `window.blur` events to detect when a student attempts to switch applications or tabs.</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Listens to visibilitychange and window.blur events when a student attempts to switch tabs or applications.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Clipboard & Context Restrictions</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Disables right-click context menus, copy-paste shortcuts (`Ctrl+C`, `Ctrl+V`), and text selection during exams.</p>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Clipboard Restrictions</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Disables right-click context menus, copy-paste shortcuts (Ctrl+C, Ctrl+V), and text selection during exams.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Live Heartbeat Monitoring</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Workstations broadcast 5-second asynchronous heartbeats updating current question index and time remaining to the supervisor board.</p>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Live Heartbeat Telemetry</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Workstations broadcast 5-second asynchronous heartbeats updating question index and time remaining to supervisor board.</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Offline LAN Deployment Model */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
-                    <WifiOff className="w-4 h-4 text-amber-500" />
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                  <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                    <WifiOff className="w-3.5 h-3.5 text-amber-500" />
                     <span>Campus LAN & Offline Execution Model</span>
-                  </h4>
-                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-2">
-                    <p>Designed to operate with zero external internet dependencies:</p>
-                    <ul className="list-disc list-inside space-y-1 text-slate-500 dark:text-slate-400">
-                      <li>Local Apache/Nginx web server and MySQL/MariaDB database deployed on a dedicated campus host machine.</li>
-                      <li>Bound to local static subnet IP / local DNS hostname (e.g., <code>http://sinav.local</code>).</li>
-                      <li>High-concurrency session handler optimized for 100+ simultaneous laboratory workstations.</li>
-                      <li>Zero external CDN dependencies — all stylesheets, scripts, and fonts bundled locally.</li>
-                    </ul>
                   </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Runs on a local campus host with Apache/Nginx & MySQL/MariaDB bound to a static subnet IP (e.g. <code>http://sinav.local</code>). Zero external CDN dependencies, high-concurrency session handler optimized for 100+ simultaneous laboratory workstations.
+                  </p>
                 </div>
               </>
             ) : activeModalProject.id === 'markaan' ? (
               <>
-                {/* Markaan Privacy Banner */}
-                <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 text-xs text-amber-900 dark:text-amber-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <div>
-                    <strong>🔒 100% Private On-Device Processing:</strong> Images never leave the host computer — zero cloud uploads, zero privacy risk, and zero bandwidth overhead.
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
+                      <Cpu className="w-4 h-4 text-amber-500" />
+                      <span>Sharp Image Engine & Architecture Deep-Dive</span>
+                    </h4>
+                    <span className="text-[11px] font-mono text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                      100% Private On-Device Execution
+                    </span>
                   </div>
-                  <a
-                    href={activeModalProject.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors shrink-0"
-                  >
-                    <GithubIcon className="w-3.5 h-3.5" />
-                    <span>View GitHub Repo</span>
-                  </a>
-                </div>
-
-                {/* Markaan Core Engineering Highlights */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-amber-500" />
-                    <span>Sharp Image Engine & Architecture Deep-Dive</span>
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Native C++ Sharp Engine (libvips)</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Employs native multithreaded libvips bindings via Node.js Sharp to batch process 500+ high-resolution photos in seconds without blocking event threads.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Native C++ Sharp Engine</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Employs native multithreaded libvips bindings via Node.js Sharp to batch process 500+ photos in seconds without blocking event threads.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Visual Watermark Positioning Canvas</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Interactive live positioning canvas supporting 9 cardinal anchor presets (center, corners, edges), fine pixel coordinate offsets, and 0-100% opacity sliders.</p>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Positioning Canvas</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Interactive live positioning canvas with 9 cardinal anchor presets, fine pixel coordinate offsets, and 0-100% opacity sliders.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Lossless Quality & Color Space Preservation</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Preserves original image dimensions, DPI metadata, and sRGB/P3 color gamuts across JPEG, PNG, and WebP raster formats.</p>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Lossless Quality Retention</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Preserves original image dimensions, DPI metadata, and sRGB/P3 color gamuts across JPEG, PNG, and WebP raster formats.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Streaming ZIP Archiver Packaging</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Pipes watermarked memory buffers directly into continuous compression streams via <code>archiver</code>, preventing memory exhaustion and enabling instant download.</p>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Streaming ZIP Archiver</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Pipes memory buffers directly into continuous compression streams via <code>archiver</code>, enabling instant packaging and download.</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Markaan Quick Setup & Windows Launcher */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
-                    <Terminal className="w-4 h-4 text-amber-500" />
-                    <span>Quick Setup & Desktop Launcher</span>
-                  </h4>
-                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-2.5">
-                    <p>Designed for immediate plug-and-play desktop execution:</p>
-                    <div className="bg-slate-900 text-emerald-400 p-3 rounded-xl font-mono text-[11px] overflow-x-auto border border-slate-800">
-                      <code>git clone https://github.com/allen9650/markaan.git<br />cd markaan<br />npm install<br />npm run dev</code>
-                    </div>
-                    <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-                      🚀 <strong>1-Click Windows Launcher:</strong> Includes <code>Start-Markaan.bat</code> in the repository root to automatically launch the Node server and open your default browser.
-                    </p>
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 dark:text-white text-xs flex items-center gap-1.5">
+                      <Terminal className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Desktop Setup & Windows Launcher: Start-Markaan.bat</span>
+                    </span>
+                    <a href={activeModalProject.github} target="_blank" rel="noopener noreferrer" className="text-[11px] text-cyan-600 dark:text-cyan-400 font-mono underline">
+                      GitHub Repository
+                    </a>
                   </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                    <code>git clone https://github.com/allen9650/markaan.git && cd markaan && npm install && npm run dev</code>
+                  </p>
                 </div>
               </>
             ) : activeModalProject.id === 'verimoo' ? (
               <>
-                {/* Verimoo Live Banner */}
-                <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 text-xs text-emerald-900 dark:text-emerald-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <div>
-                    <strong>🌐 Production Cloud Platform:</strong> Live certificate management and verification SaaS deployed on Vercel.
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
+                      <QrCode className="w-4 h-4 text-emerald-500" />
+                      <span>Verification & Unique ID Generation Engine</span>
+                    </h4>
+                    <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      Live Production SaaS
+                    </span>
                   </div>
-                  {activeModalProject.liveUrl && (
-                    <a
-                      href={activeModalProject.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition-colors shrink-0"
-                    >
-                      <Globe className="w-3.5 h-3.5" />
-                      <span>Open Live App</span>
-                    </a>
-                  )}
-                </div>
-
-                {/* Verimoo Verification Architecture */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
-                    <QrCode className="w-4 h-4 text-emerald-500" />
-                    <span>Verification & Unique ID Generation Engine</span>
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Unique Certificate ID Generation</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Generates tamper-resistant, collision-free alphanumeric verification serials indexed in MongoDB for sub-millisecond retrieval.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Unique Serial Engine</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Generates tamper-resistant, collision-free alphanumeric serials indexed in MongoDB for sub-millisecond retrieval.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
                       <strong className="text-slate-900 dark:text-white block">Public Verification Portal</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Allows employers, universities, and regulatory auditors to verify credentials instantly without authentication.</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Public lookup portal where employers and auditors check and validate credentials instantly by serial ID.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
                       <strong className="text-slate-900 dark:text-white block">RESTful Verification API</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Programmatic JSON endpoint allowing external HR systems and LMS portals to query validation status and validity.</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Programmatic JSON endpoint enabling external HR systems and LMS portals to query validity programmatically.</p>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Organization Brand Customization</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Custom institutional branding templates supporting company logos, signatures, official seals, and custom typography.</p>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Brand Customization</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Custom templates supporting organization logos, authorized signatures, seals, and typography.</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Verimoo Next.js & MongoDB Architecture */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
-                    <Database className="w-4 h-4 text-cyan-500" />
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                  <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                    <Database className="w-3.5 h-3.5 text-cyan-500" />
                     <span>Next.js App Router & Serverless Optimizations</span>
-                  </h4>
-                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-2">
-                    <p>Production optimizations featured in v1.2.5 release:</p>
-                    <ul className="list-disc list-inside space-y-1 text-slate-500 dark:text-slate-400">
-                      <li><strong>Dual-Format (PNG & PDF) High-Definition Engine:</strong> 300 DPI high-res PNG and vector PDF generation with zero-dependency <code>pdf-lib</code>.</li>
-                      <li><strong>Vercel 4.5MB Serverless Limit Optimization:</strong> Optimized raster template rendering and font subset embedding keeping payload under 1MB.</li>
-                      <li><strong>MongoDB Validation & Indexing:</strong> Strict participant existence checks returning proper 404 handling on invalid serial numbers.</li>
-                      <li><strong>Multi-Tier In-Memory Caching:</strong> In-memory caching for SVG, PNG, and PDF outputs reducing repeat retrieval times to ~1ms.</li>
-                    </ul>
                   </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Dual-format (PNG & PDF) 300 DPI engine with zero-dependency <code>pdf-lib</code>, Vercel 4.5MB serverless payload optimization (&lt;1MB), MongoDB indexed serial lookups, and multi-tier in-memory caching (~1ms).
+                  </p>
                 </div>
               </>
             ) : activeModalProject.id === 'legal-aid-assistant' ? (
               <>
-                {/* Legal Aid Architecture Breakdown */}
-                <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 text-xs text-blue-900 dark:text-blue-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div>
-                      <strong>🎓 Final Year Capstone:</strong> Presented at Shah Abdul Latif University (SALU) Project Exhibition with Muhammad Shafiullah.
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
+                      <Scale className="w-4 h-4 text-blue-500" />
+                      <span>AI Legal Assistant Architecture</span>
+                    </h4>
+                    <span className="text-[11px] font-mono text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
+                      SALU Graduation Capstone
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Google Gemini LLM</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Prompt engineering tailored for legal document synthesis, cross-referencing statutory clauses, and advice.</p>
                     </div>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">NextAuth.js OAuth</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Multi-provider OAuth with Google and GitHub, encrypted JWT tokens, and anonymous guest trial access.</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">Legal Knowledge Base</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Pre-built query trees and legal FAQs across Family Law, Property Disputes, Criminal, and Financial Law.</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-slate-900 dark:text-white block">MongoDB Persistence</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Mongoose schemas storing user profiles, chat query history, audit trails, and legal FAQ documents.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 dark:text-white text-xs flex items-center gap-1.5">
+                      <Terminal className="w-3.5 h-3.5 text-blue-500" />
+                      <span>Exhibition Capstone Project with Muhammad Shafiullah</span>
+                    </span>
                     {activeModalProject.liveUrl && (
-                      <a
-                        href={activeModalProject.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 transition-colors shrink-0"
-                      >
-                        <Globe className="w-3.5 h-3.5" />
-                        <span>Open Live Demo</span>
+                      <a href={activeModalProject.liveUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] text-blue-600 dark:text-blue-400 font-mono underline">
+                        Open Vercel App
                       </a>
                     )}
                   </div>
-
-                  {/* Architecture Highlights */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Google Generative AI Engine</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Gemini LLM prompt engineering tailored for legal document synthesis, cross-referencing statutory clauses, and natural language advice.</p>
-                    </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">NextAuth.js Multi-Provider OAuth</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Seamless OAuth integration with Google and GitHub, encrypted JWT session tokens, and instant anonymous guest trial access.</p>
-                    </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">Categorized Legal Knowledge (legalFAQs)</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Pre-built query trees and legal insights across Pakistani Family Law, Property Disputes, Criminal Law, and Financial Regulations.</p>
-                    </div>
-                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                      <strong className="text-slate-900 dark:text-white block">MongoDB Document Persistence</strong>
-                      <p className="text-slate-600 dark:text-slate-400">Mongoose schemas storing user profiles, query history, audit trails, and legal FAQ repository documents.</p>
-                    </div>
-                  </div>
-
-                  {/* Installation Guide */}
-                  <div className="space-y-2">
-                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
-                      <Terminal className="w-4 h-4 text-blue-500" />
-                      <span>Installation & Development Runbook</span>
-                    </h4>
-
-                    <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono space-y-2">
-                      <div className="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
-                        <span>Terminal Setup Steps</span>
-                        <button
-                          onClick={() => handleCopyCommand("git clone https://github.com/yourusername/auth-legal.git && cd auth-legal && npm install && npm run dev")}
-                          className="inline-flex items-center gap-1.5 text-[11px] text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
-                        >
-                          {copiedInstallCmd ? (
-                            <>
-                              <Check className="w-3.5 h-3.5 text-emerald-400" />
-                              <span className="text-emerald-400">Copied!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="w-3.5 h-3.5" />
-                              <span>Copy Setup</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                      <pre className="text-emerald-400 text-[11px] overflow-x-auto whitespace-pre-wrap leading-relaxed">
-{`# 1. Clone the repository
-git clone https://github.com/yourusername/auth-legal.git
-cd auth-legal
-
-# 2. Install dependencies
-npm install
-
-# 3. Start development server
-npm run dev`}
-                      </pre>
-                    </div>
-                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Presented and demonstrated at Shah Abdul Latif University (SALU) Project Exhibition. Features responsive UI built with Next.js, Tailwind CSS, and Shadcn UI.
+                  </p>
                 </div>
               </>
             ) : (
               <>
-                {/* Adalynn Architecture */}
-                <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-500/30 text-xs text-purple-900 dark:text-purple-300">
-                    <strong>🎓 7th Semester CS-PRE-EXPO Milestone (SALU 2024):</strong> {activeModalProject.note}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
+                      <Mic className="w-4 h-4 text-purple-500" />
+                      <span>Offline Speech AI Pipeline Architecture</span>
+                    </h4>
+                    <span className="text-[11px] font-mono text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">
+                      7th Sem CS-PRE-EXPO Milestone
+                    </span>
                   </div>
-
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold flex items-center gap-2">
-                    <Terminal className="w-4 h-4 text-purple-500" />
-                    <span>Installation & Required Python Libraries</span>
-                  </h4>
-
-                  {/* Terminal Install Block */}
-                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono space-y-2">
-                    <div className="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
-                      <span>Bash / Terminal</span>
-                      <button
-                        onClick={() => handleCopyCommand(activeModalProject.installation.command)}
-                        className="inline-flex items-center gap-1.5 text-[11px] text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
-                      >
-                        {copiedInstallCmd ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>Copy Command</span>
-                          </>
-                        )}
-                      </button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-purple-600 dark:text-purple-400 block">PyAudio (16kHz)</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Streams microphone input asynchronously at 16,000 Hz with zero cloud latency.</p>
                     </div>
-                    <code className="text-emerald-400 block pt-1">
-                      {activeModalProject.installation.command}
-                    </code>
-                  </div>
-
-                  {/* Library breakdown list */}
-                  <div className="space-y-2">
-                    <h5 className="text-xs font-bold text-slate-900 dark:text-white">Required Libraries Breakdown:</h5>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                      {activeModalProject.installation.libraries.map((lib, lIdx) => (
-                        <div key={lIdx} className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800">
-                          <strong className="text-purple-600 dark:text-purple-400 font-mono block">{lib.name}</strong>
-                          <span className="text-slate-600 dark:text-slate-400 text-[11px]">{lib.desc}</span>
-                        </div>
-                      ))}
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-purple-600 dark:text-purple-400 block">Vosk Acoustic Model</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Offline speech-to-text recognition running 100% locally on CPU without internet.</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-purple-600 dark:text-purple-400 block">pyttsx3 Voice Engine</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Native multi-platform speech synthesis converting recognized intents to audio.</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                      <strong className="text-purple-600 dark:text-purple-400 block">Tkinter & Matplotlib</strong>
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">Live visual audio wave canvas animating vocal pitch during assistant speech.</p>
                     </div>
                   </div>
+                </div>
 
-                  {/* Pipeline Overview */}
-                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs space-y-2">
-                    <h5 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                      <Activity className="w-4 h-4 text-purple-500" />
-                      <span>Speech Processing Pipeline</span>
-                    </h5>
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                      Microphone input is captured at 16kHz via <strong>PyAudio</strong>, fed into <strong>Vosk</strong>'s offline acoustic model, and parsed via Python's <strong>json</strong> module. Recognized intent executes actions like opening websites via <strong>webbrowser</strong>, responding via <strong>pyttsx3</strong> audio synthesis, and animating audio wave oscillations in <strong>Matplotlib / Tkinter</strong>.
-                    </p>
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-300 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 dark:text-white text-xs flex items-center gap-1.5">
+                      <Terminal className="w-3.5 h-3.5 text-purple-500" />
+                      <span>Python Dependencies & Pipeline Runbook</span>
+                    </span>
+                    <button
+                      onClick={() => handleCopyCommand(activeModalProject.installation?.command || 'pip install vosk pyaudio pyttsx3')}
+                      className="inline-flex items-center gap-1 text-[11px] text-purple-600 dark:text-purple-400 font-mono hover:underline cursor-pointer"
+                    >
+                      {copiedInstallCmd ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedInstallCmd ? 'Copied' : 'Copy pip command'}</span>
+                    </button>
                   </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                    <code>{activeModalProject.installation?.command || 'pip install vosk pyaudio pyttsx3'}</code>
+                  </p>
                 </div>
               </>
             )}
 
-            {/* Tech Stack Pills in Modal */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
+            {/* Technologies Pills */}
+            <div className="space-y-1.5 pt-1">
+              <h4 className="text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
                 Technologies & Tools
               </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {activeModalProject.technologies.map((tech, i) => (
                   <span
                     key={i}
-                    className="text-xs font-mono px-3 py-1 rounded-lg bg-slate-100 dark:bg-black border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300"
+                    className="text-[11px] font-mono px-2.5 py-0.5 rounded-lg bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300"
                   >
                     {tech.name}
                   </span>
@@ -1120,14 +1093,14 @@ npm run dev`}
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-neutral-800">
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200 dark:border-neutral-800">
               <button
                 onClick={() => setActiveModalProject(null)}
                 className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-neutral-900 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
               >
                 Close
               </button>
-              {activeModalProject.liveUrl ? (
+              {activeModalProject.liveUrl && (
                 <a
                   href={activeModalProject.liveUrl}
                   target="_blank"
@@ -1135,15 +1108,8 @@ npm run dev`}
                   className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-colors inline-flex items-center gap-1.5"
                 >
                   <Globe className="w-3.5 h-3.5" />
-                  <span>Launch Live Platform 🌐</span>
+                  <span>Launch Live Platform</span>
                 </a>
-              ) : (
-                <Link
-                  to="/contact"
-                  className="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-bold hover:bg-cyan-400 transition-colors"
-                >
-                  Inquire About Platform Deployment
-                </Link>
               )}
             </div>
           </div>
