@@ -14,6 +14,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import ContactPage from './pages/ContactPage';
 import ToolsPage from './pages/ToolsPage';
 import PwaInstallPage from './pages/PwaInstallPage';
+import TechBackground from './components/TechBackground';
 
 import { Terminal, PhoneCall } from 'lucide-react';
 
@@ -23,6 +24,9 @@ export default function App() {
   return (
     <Router>
       <div className="relative min-h-screen bg-slate-50 text-slate-900 dark:bg-black dark:text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-900 dark:selection:text-cyan-200 overflow-x-hidden flex flex-col justify-between transition-colors duration-300">
+        {/* Dynamic interactive tech background on all pages */}
+        <TechBackground />
+
         {/* Background Subtle Grid */}
         <div className="fixed inset-0 grid-bg opacity-15 dark:opacity-10 pointer-events-none -z-10" />
 
@@ -33,7 +37,7 @@ export default function App() {
         <Navbar onOpenTerminal={() => setTerminalOpen(true)} />
 
         {/* Dedicated Route Views */}
-        <main className="flex-grow">
+        <main className="flex-grow relative z-10">
           <Routes>
             <Route path="/" element={<HomePage onOpenTerminal={() => setTerminalOpen(true)} />} />
             <Route path="/about" element={<AboutPage />} />

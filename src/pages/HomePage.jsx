@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { personalInfo } from '../data/portfolioData';
-import TechBackground from '../components/TechBackground';
 import { 
   ArrowRight, 
   ArrowUpRight, 
@@ -84,42 +83,23 @@ export default function HomePage({ onOpenTerminal }) {
   ];
 
   return (
-    <div className="relative min-h-[85vh] flex flex-col justify-center">
-      {/* Dynamic interactive tech background */}
-      <TechBackground />
+    <div className="pt-32 pb-24 px-4 sm:px-6 max-w-3xl mx-auto w-full space-y-12 animate-fade-in-up">
+      {/* Profile Header: Intro */}
+      <section className="space-y-6">
+        <div className="space-y-1.5">
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            {personalInfo.name}
+          </h1>
 
-      <div className="relative z-10 pt-32 pb-24 px-4 sm:px-6 max-w-3xl mx-auto w-full space-y-12 animate-fade-in-up">
-        {/* Profile Header: Photo + Intro */}
-        <section className="space-y-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            {/* Profile Photo */}
-            <div className="relative shrink-0">
-              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border border-slate-200 dark:border-neutral-800 shadow-md bg-slate-100 dark:bg-neutral-900 backdrop-blur-xs">
-                <img
-                  src={personalInfo.photo}
-                  alt={personalInfo.name}
-                  className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
-                  loading="eager"
-                />
-              </div>
-            </div>
-
-            {/* Name & Title */}
-            <div className="space-y-1.5">
-              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                {personalInfo.name}
-              </h1>
-
-              <p className="text-base sm:text-lg text-cyan-600 dark:text-cyan-400 font-mono font-semibold">
-                IT Enthusiast
-              </p>
-            </div>
-          </div>
-
-          {/* Concise Bio */}
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            BS Computer Science graduate focused on enterprise network infrastructure, pfSense firewalls, IP camera CCTV systems, and modern software development.
+          <p className="text-base sm:text-lg text-cyan-600 dark:text-cyan-400 font-mono font-semibold">
+            IT Enthusiast
           </p>
+        </div>
+
+        {/* Concise Bio */}
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+          BS Computer Science graduate focused on enterprise network infrastructure, pfSense firewalls, IP camera CCTV systems, and modern software development.
+        </p>
 
           {/* Social / External Links */}
           <div className="pt-1">
@@ -197,6 +177,5 @@ export default function HomePage({ onOpenTerminal }) {
           </div>
         </section>
       </div>
-    </div>
   );
 }
